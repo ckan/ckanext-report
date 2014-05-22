@@ -15,7 +15,7 @@ class ReportPlugin(p.SingletonPlugin):
         map.redirect('/reports', '/report')
         map.connect('report', '/report/:report_name', controller=report_ctlr,
                     action='view')
-        map.connect('report-org', '/data/:report_name/:organization',
+        map.connect('report-org', '/report/:report_name/:organization',
                     controller=report_ctlr, action='view')
         return map
 
