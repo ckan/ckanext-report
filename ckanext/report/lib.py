@@ -36,6 +36,8 @@ def dataset_notes(pkg):
     configurable.'''
     from pylons import config
     expression = config.get('ckanext-report.notes.dataset')
+    if not expression:
+        return ''
     return eval(expression, None, {'pkg': pkg, 'asbool': p.toolkit.asbool})
 
 
