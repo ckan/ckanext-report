@@ -1,6 +1,6 @@
 # ckanext-report
 
-ckanext-report is a CKAN extension that provides a reporting infrastructure. Here are the features offered::
+ckanext-report is a CKAN extension that provides a reporting infrastructure. Here are the features offered:
 
 * All available reports are listed on a central web page and from the command-line.
 * Breadcrumbs allow navigation from a report back to the reports page.
@@ -18,43 +18,45 @@ TODO:
 
 ## Install & setup
 
-1. Install ckanext-report into your CKAN virtual environment in the usual way::
+1. Install ckanext-report into your CKAN virtual environment in the usual way:
 
-  (pyenv) $ pip install -e git+https://github.com/datagovuk/ckanext-report.git#egg=ckanext-report
+    (pyenv) $ pip install -e git+https://github.com/datagovuk/ckanext-report.git#egg=ckanext-report
 
-2. Initialize the database tables needed by ckanext-report::
+2. Initialize the database tables needed by ckanext-report:
 
-  (pyenv) $ paster --plugin=ckanext-report report initdb --config=mysite.ini
+    (pyenv) $ paster --plugin=ckanext-report report initdb --config=mysite.ini
 
-3. Enable the plugin. In your config (e.g. development.ini or production.ini) add ``report`` to your ckan.plugins. e.g.::
+3. Enable the plugin. In your config (e.g. development.ini or production.ini) add ``report`` to your ckan.plugins. e.g.:
 
-  ckan.plugins = report
+    ckan.plugins = report
 
-4. Get the list of reports::
+4. Get the list of reports:
 
-  (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
+    (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
 
 
 ## Command-line interface
 
-The following operations can be run from the command line using the ``paster --plugin=ckanext-report report`` command::
+The following operations can be run from the command line using the ``paster --plugin=ckanext-report report`` command:
 
+```
   report list
     - lists the reports
 
   report generate [report1,report2,...]
     - generate the specified reports, or all of them if none specified
+```
 
-e.g.::
+e.g.:
 
-  (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
+    (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
 
 
 ## Dataset Notes
 
 Reports that examine datasets include a column 'Dataset Notes', designed to show custom properties of the datasets. There are often key properties that you want to show, such as whether a dataset is private, harvested etc., but it is configurable because every CKAN install is different. To configure the contents of this: put a python expression in the CKAN config `ckanext-report.notes.dataset`.
 
-For example at data.gov.uk we flag up if a dataset is 'unpublished', has been harvested or was imported from ONSHUB::
+For example at data.gov.uk we flag up if a dataset is 'unpublished', has been harvested or was imported from ONSHUB:
 
 ```
 ckanext-report.notes.dataset = ' '.join(('Unpublished' if asbool(pkg.extras.get('unpublished')) else '', 'UKLP' if asbool(pkg.extras.get('UKLP')) else '', 'National Statistics Pub Hub' if pkg.extras.get('external_reference')=='ONSHUB' else ''))
@@ -62,7 +64,7 @@ ckanext-report.notes.dataset = ' '.join(('Unpublished' if asbool(pkg.extras.get(
 
 # Creating a Report
 
-A report has three key elements::
+A report has three key elements:
 
 1. Report Code - a python function that produces the report. 
 2. Template - HTML for displaying the report data.
@@ -72,7 +74,7 @@ A report has three key elements::
 
 The code that produces the report will probably make some calls to the logic layer or database, assemble the data into dicts/lists and then return them. This will be saved as JSON in the database data_cache.
 
-The returned data should be a dict like this::
+The returned data should be a dict like this:
 
 ```json
 {'table': [
@@ -97,7 +99,7 @@ The convention is to put the report code in: `ckanext/<extension>/reports.py`
 
 When you view a report, ckanext-report will automatically show the title, options, the CSV/JSON download buttons and for the administrator a 'refresh' button. Everything below that, the display of the data itself, is the job of the report template.
 
-The report template will probably display the incidental data and then the table::
+The report template will probably display the incidental data and then the table:
 
 ```html
 <ul>
@@ -134,13 +136,13 @@ The report template will probably display the incidental data and then the table
 
 The convention is to put the report templates in: `ckanext/<extension>/templates/report/<report_name>.html`
 
-  Note: currently ckanext-report has Genshi templates, due to the author still using legacy templates from pre-CKAN 1.8. Feel free to update them to Jinja, used by CKAN 2+ - there isn't a lot to change.
+Note: ckanext-report currently has Genshi templates, due to the author still using legacy templates from pre-CKAN 1.8. Feel free to update them to Jinja, used by CKAN 2+ - there isn't a lot to change.
 
 ## Registration
 
 Register your report with ckanext-report with the IReport plugin and supply its configuration.
 
-Your extension will probably have a file `plugin.py` defining plugins - classes which inherit from `p.SingletonPlugin`. Make a plugin implement IReport, based on this example plugin.py::
+Your extension will probably have a file `plugin.py` defining plugins - classes which inherit from `p.SingletonPlugin`. Make a plugin implement IReport, based on this example plugin.py:
 
 ```python
 import ckan.plugins as p
@@ -156,7 +158,7 @@ class TagPlugin(p.SingletonPlugin):
         return [reports.tag_report_info]
 ```
 
-The last line refers to `tag_report_info` which is a dictionary with properties of the report. This is stored in `reports.py` together with the report code (see above). The info dict looks like this::
+The last line refers to `tag_report_info` which is a dictionary with properties of the report. This is stored in `reports.py` together with the report code (see above). The info dict looks like this:
 
 ```python
 from ckan.lib.helpers import OrderedDict
@@ -181,7 +183,7 @@ Required keys:
 * option_defaults - dict of ALL option names and their default values
 * option_combinations - function returning a list of all the options combinations (reports for these combinations are generated by default)
 
-Finally we need to define the function that returns the option_combinations::
+Finally we need to define the function that returns the option_combinations:
 ```
 def tag_report_option_combinations():
     for organization in all_organizations(include_none=True):
