@@ -18,21 +18,25 @@ TODO:
 
 ## Install & setup
 
-1. Install ckanext-report into your CKAN virtual environment in the usual way:
+Install ckanext-report into your CKAN virtual environment in the usual way:
 
     (pyenv) $ pip install -e git+https://github.com/datagovuk/ckanext-report.git#egg=ckanext-report
 
-2. Initialize the database tables needed by ckanext-report:
+Initialize the database tables needed by ckanext-report:
 
     (pyenv) $ paster --plugin=ckanext-report report initdb --config=mysite.ini
 
-3. Enable the plugin. In your config (e.g. development.ini or production.ini) add ``report`` to your ckan.plugins. e.g.:
+Enable the plugin. In your config (e.g. development.ini or production.ini) add ``report`` to your ckan.plugins. e.g.:
 
     ckan.plugins = report
 
-4. Get the list of reports:
+Get the list of reports:
 
     (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
+
+Generate all reports:
+
+    (pyenv) $ paster --plugin=ckanext-report report generate --config=mysite.ini
 
 
 ## Command-line interface
