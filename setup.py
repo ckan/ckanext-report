@@ -1,5 +1,4 @@
 from setuptools import setup, find_packages
-import sys, os
 
 version = '0.1'
 
@@ -24,7 +23,9 @@ setup(
     ],
     entry_points='''
         [ckan.plugins]
-        # Add plugins here, e.g.
-        # myplugin=ckanext.report.plugin:PluginClass
+        report = ckanext.report.plugin:ReportPlugin
+
+        [paste.paster_command]
+        report = ckanext.report.command:ReportCommand
     ''',
 )
