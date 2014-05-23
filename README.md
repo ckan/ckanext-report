@@ -80,7 +80,7 @@ The code that produces the report will probably make some calls to the logic lay
 
 The returned data should be a dict like this:
 
-```json
+```javascript
 {'table': [
     {'tag': 'history', 'count': 12, 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
     {'tag': 'science', 'count': 4, 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
