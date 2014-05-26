@@ -127,7 +127,7 @@ The report template will probably display the incidental data and then the table
 <table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
     <thead>
       <tr>
-        <th>Package</th>
+        <th>Dataset</th>
         <th>User</th>
         <th>Notes</th>
         <th>Created</th>
