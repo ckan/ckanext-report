@@ -1,5 +1,5 @@
 import ckan.plugins as p
-
+from ckanext.report.interfaces import IReport
 
 class ReportPlugin(p.SingletonPlugin):
     p.implements(p.IRoutes, inherit=True)
@@ -32,3 +32,18 @@ class ReportPlugin(p.SingletonPlugin):
             'report__relative_url_for': h.relative_url_for,
             'report__chunks': h.chunks,
             }
+
+
+class TaglessReportPlugin(p.SingletonPlugin):
+    '''
+    This is a working example only. To be kept simple and demonstrate features,
+    rather than be particularly meaningful.
+    '''
+    p.implements(IReport)
+
+    # IReport
+
+    def register_reports(self):
+        import reports
+        return [reports.tagless_report_info]
+

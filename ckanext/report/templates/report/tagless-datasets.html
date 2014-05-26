@@ -1,0 +1,31 @@
+<html xmlns:py="http://genshi.edgewall.org/"
+  xmlns:i18n="http://genshi.edgewall.org/i18n"
+  xmlns:xi="http://www.w3.org/2001/XInclude">
+<ul>
+    <li>Packages without tags: ${len(c.data['table'])}</li>
+    <li>Average tags per package: ${c.data['average_tags_per_package']} tags</li>
+</ul>
+
+<table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
+    <thead>
+      <tr>
+        <th>Package</th>
+        <th>User</th>
+        <th>Created</th>
+      </tr>
+    </thead>
+    <tbody>
+      <py:for each="row in c.data['table']">
+        <tr>
+          <td>
+            <a href="${h.url_for(controller='package', action='view', id=row['name'])}">
+              ${row['title']}
+            </a>
+          </td>
+          <td>${h.linked_user(row['user'])}</td>
+          <td>${h.render_datetime(row['created'])}</td>
+        </tr>
+      </py:for>
+    </tbody>
+</table>
+</html>

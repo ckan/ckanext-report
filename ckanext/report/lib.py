@@ -31,6 +31,24 @@ def go_down_tree(organization):
             yield grandchild
 
 
+def filter_by_organizations(query, organization, include_sub_organizations):
+    '''Given an SQLAlchemy ORM query object, it returns it filtered by the
+    given organization and optionally its sub organizations too.
+    '''
+    from ckan import model
+    if not organization:
+        return query
+    if isinstance(organization, basestring):
+        organization = model.Group.get(organization)
+        assert organization
+    if include_sub_organizations:
+        orgs = sorted([x for x in go_down_tree(organization)], key=lambda x: x.name)
+        org_ids = [org.id for org in orgs]
+        return query.filter(model.Package.owner_org.in_(org_ids))
+    else:
+        return query.filter(model.Package.owner_org == organization.id)
+
+
 def dataset_notes(pkg):
     '''Returns a string with notes about the given package. It is
     configurable.'''

@@ -24,6 +24,7 @@ setup(
     entry_points='''
         [ckan.plugins]
         report = ckanext.report.plugin:ReportPlugin
+        tagless_report = ckanext.report.plugin:TaglessReportPlugin
 
         [paste.paster_command]
         report = ckanext.report.command:ReportCommand
