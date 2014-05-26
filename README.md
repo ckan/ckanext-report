@@ -94,13 +94,13 @@ The returned data should be a dict like this:
 
 ```javascript
 {
-  'table': [
-    {'tag': 'history', 'count': 12, 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
-    {'tag': 'science', 'count': 4, 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
-    {'tag': 'geography', 'count': 5, 'user': 'bob', 'created': '2012-01-02T16:34:24.958284'}
-    ]
-  'total_tags_used': 21,
-  'last_added': '2014-04-13T20:40:20.123456'
+    'table': [
+        {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested', 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
+        {'name': 'co2-monthly', 'title' 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
+    ],
+    'num_packages': 56,
+    'packages_without_tags_percent': 4,
+    'average_tags_per_package': 3.5,
 }
 ```
   
@@ -120,7 +120,7 @@ The report template will probably display the incidental data and then the table
 
 ```html
 <ul>
-    <li>Packages without tags: ${len(c.data['table'])}</li>
+    <li>Datasets without tags: ${len(c.data['table'])} / ${c.data['num_packages']} (${c.data['packages_without_tags_percent']}%)</li>
     <li>Average tags per package: ${c.data['average_tags_per_package']} tags</li>
 </ul>
 
@@ -129,6 +129,7 @@ The report template will probably display the incidental data and then the table
       <tr>
         <th>Package</th>
         <th>User</th>
+        <th>Notes</th>
         <th>Created</th>
       </tr>
     </thead>
@@ -140,6 +141,7 @@ The report template will probably display the incidental data and then the table
               ${row['title']}
             </a>
           </td>
+          <td>${row['notes']}</td>
           <td>${h.linked_user(row['user'])}</td>
           <td>${h.render_datetime(row['created'])}</td>
         </tr>

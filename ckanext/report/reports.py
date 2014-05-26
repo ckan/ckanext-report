@@ -11,10 +11,13 @@ def tagless_report(organization, include_sub_organizations=False):
     '''
     Produces a report on packages without tags.
     Returns something like this:
-        {'table': [
-            {'name': 'river-levels', 'title': 'River levels', 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
-            {'name': 'co2-monthly', 'title' 'CO2 monthly', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
-            ]
+        {
+         'table': [
+            {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested', 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
+            {'name': 'co2-monthly', 'title' 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
+            ],
+         'num_packages': 56,
+         'packages_without_tags_percent': 4,
          'average_tags_per_package': 3.5,
         }
     '''
@@ -25,9 +28,10 @@ def tagless_report(organization, include_sub_organizations=False):
     if organization:
         q = lib.filter_by_organizations(q, organization,
                                         include_sub_organizations)
-    pkgs = [OrderedDict((
+    tagless_pkgs = [OrderedDict((
             ('name', pkg.name),
             ('title', pkg.title),
+            ('notes', lib.dataset_notes(pkg)),
             ('user', pkg.creator_user_id),
             ('created', pkg.metadata_created.isoformat()),
             )) for pkg in q.all()]
@@ -42,9 +46,12 @@ def tagless_report(organization, include_sub_organizations=False):
         average_tags_per_package = round(float(num_taggings) / num_packages, 1)
     else:
         average_tags_per_package = None
+    packages_without_tags_percent = lib.percent(len(tagless_pkgs), num_packages)
 
     return {
-        'table': pkgs,
+        'table': tagless_pkgs,
+        'num_packages': num_packages,
+        'packages_without_tags_percent': packages_without_tags_percent,
         'average_tags_per_package': average_tags_per_package,
         }
 

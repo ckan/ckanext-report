@@ -2,14 +2,15 @@
   xmlns:i18n="http://genshi.edgewall.org/i18n"
   xmlns:xi="http://www.w3.org/2001/XInclude">
 <ul>
-    <li>Packages without tags: ${len(c.data['table'])}</li>
+    <li>Datasets without tags: ${len(c.data['table'])} / ${c.data['num_packages']} (${c.data['packages_without_tags_percent']}%)</li>
     <li>Average tags per package: ${c.data['average_tags_per_package']} tags</li>
 </ul>
 
 <table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
     <thead>
       <tr>
-        <th>Package</th>
+        <th>Dataset</th>
+        <th>Notes</th>
         <th>User</th>
         <th>Created</th>
       </tr>
@@ -22,6 +23,7 @@
               ${row['title']}
             </a>
           </td>
+          <td>${row['notes']}</td>
           <td>${h.linked_user(row['user'])}</td>
           <td>${h.render_datetime(row['created'])}</td>
         </tr>
