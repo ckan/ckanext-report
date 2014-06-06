@@ -26,6 +26,8 @@ class Report(object):
                        REPORT_KEYS_OPTIONAL
         assert not unknown_keys, 'Report info dict has unrecognized keys %r: '\
             '%r' % (unknown_keys, report_info_dict)
+        if not report_info_dict['option_defaults']:
+            report_info_dict['option_defaults'] = OrderedDict()
         assert isinstance(report_info_dict['option_defaults'], OrderedDict)
 
         # Save the required keys
