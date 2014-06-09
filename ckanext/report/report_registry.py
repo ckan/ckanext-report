@@ -57,7 +57,10 @@ class Report(object):
             else:
                 value = option_dict[key]
             if isinstance(value, basestring):
-                value = str(value)
+                try:
+                    value = str(value)
+                except UnicodeEncodeError:
+                    value = value.encode('utf8')
             elif isinstance(value, bool):
                 value = 1 if value else 0
             else:
