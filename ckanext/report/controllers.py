@@ -75,6 +75,11 @@ class ReportController(t.BaseController):
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(dguhelpers.relative_url_for(refresh=None))
 
+        # Check for any options not allowed by the report
+        for key in c.options:
+            if key not in report.option_defaults:
+                t.abort(400, 'Option not allowed by report: %s' % key)
+
         try:
             c.data, c.report_date = report.get_fresh_report(**c.options)
         except t.ObjectNotFound:
