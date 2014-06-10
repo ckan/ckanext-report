@@ -13,14 +13,27 @@
     <li><a href="${h.url_for('reports')}">Reports</a></li>
   </py:match>
 
-  <div py:match="content" class="dataset" style="margin-bottom: 10px">
-    <div py:for="report_row in h.report__chunks(c.reports, 3)" class="row views-row" style="padding: 15px 15px;">
-      <div py:for="report in report_row" class="col-md-4">
-        <a href="${h.url_for(controller='ckanext.report.controllers:ReportController', action='view', report_name=report.name)}" style="min-height: 160px; padding: 10px 15px; background: none repeat scroll 0% 0% #FFF; display: block; color: #666;">
-          <h3>${report.title}</h3>
-          <p>${report.description}</p>
-        </a>
-      </div>
+  <div py:match="content" class="dataset">
+    <div class="row">
+      <py:for each="i in range(len(c.reports))">
+        <div class="clearfix visible-lg" py:if="i%4==0"></div>
+        <div class="clearfix visible-md clearfix-ie7" py:if="i%3==0"></div>
+        <div class="clearfix visible-sm" py:if="i%2==0"></div>
+        <div py:with="report = c.reports[i]" class="col-lg-3 col-md-4 col-sm-6">
+          <div class="report-summary">
+            <a href="${h.url_for('report', report_name=report.name)}" class="report-header">
+              <div class="report-title">${report.title}</div>
+            </a>
+            <div class="report-body">
+              <div class="report-description">${report.description}</div>
+              <div class="clearfix clearfix-ie7"> &nbsp;</div>
+              <a class="view-report-link" href="${h.url_for('report', report_name=report.name)}">
+                View Report
+              </a>
+            </div>
+          </div>
+        </div>
+      </py:for>
     </div>
   </div>
   <xi:include href="../layout_base.html" />
