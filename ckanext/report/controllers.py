@@ -67,7 +67,11 @@ class ReportController(t.BaseController):
 
         # Alternative way to refresh the cache - not in the UI, but is
         # handy for testing
-        if t.asbool(t.request.params.get('refresh')):
+        try:
+            refresh = t.asbool(t.request.params.get('refresh'))
+        except ValueError:
+            refresh = False
+        if refresh:
             if not (c.userobj and c.userobj.sysadmin):
                 t.abort(401)
             c.options.pop('refresh')
