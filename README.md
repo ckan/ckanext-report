@@ -19,6 +19,12 @@ TODO:
 * Stop a report from being generated multiple times in parallel (unnecessary waste) - use a queue?
 * Stop more than one report being generated in parallel (high load for the server) - maybe use a queue.
 
+Compatibility: Requires CKAN version 2.1 or later (but can be easily adapted for older versions).
+
+Status: in production at data.gov.uk but that site uses Genshi templates (for historical reasons) so for others to use it the report template needs a bit of conversion to Jinja, whicih shouldn't be at all hard.
+
+Author(s): David Read
+
 
 ## Install & setup
 
