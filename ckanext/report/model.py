@@ -70,7 +70,7 @@ class DataCache(object):
         Retrieves the value and date that it was written if the record with
         object_id/key exists. If not it will return None/None.
         """
-        from ckanext.report.json import DateTimeJsonDecoder
+        from ckanext.report.json_utils import DateTimeJsonDecoder
 
         item = model.Session.query(cls)\
                    .filter(cls.key == key)\
@@ -105,7 +105,7 @@ class DataCache(object):
         create a new record.  All values will be returned as a string, unless
         convert_json is done to convert from JSON.
         """
-        from ckanext.report.json import DateTimeJsonEncoder
+        from ckanext.report.json_utils import DateTimeJsonEncoder
 
         if convert_json:
             value = json.dumps(value, cls=DateTimeJsonEncoder)
