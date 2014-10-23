@@ -5,7 +5,7 @@ import ckan.plugins.toolkit as t
 import ckanext.dgu.lib.helpers as dguhelpers
 from ckanext.report.report_registry import ReportRegistry
 from ckan.lib.render import TemplateNotFound
-from ckanext.report.json import DateTimeJsonEncoder
+from ckanext.report.json_utils import DateTimeJsonEncoder
 from ckan.common import OrderedDict
 
 c = t.c
