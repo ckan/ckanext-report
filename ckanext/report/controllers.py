@@ -2,7 +2,7 @@ import datetime
 import json
 
 import ckan.plugins.toolkit as t
-import ckanext.dgu.lib.helpers as dguhelpers
+import ckanext.report.helpers as helpers
 from ckanext.report.report_registry import ReportRegistry
 from ckan.lib.render import TemplateNotFound
 from ckanext.report.json import DateTimeJsonEncoder
@@ -28,16 +28,16 @@ class ReportController(t.BaseController):
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \
             'organization' not in report.option_defaults:
-                t.redirect_to(dguhelpers.relative_url_for(organization=None))
+                t.redirect_to(helpers.relative_url_for(organization=None))
         elif 'organization' not in t.request.environ['pylons.routes_dict'] and\
             'organization' in report.option_defaults and \
             report.option_defaults['organization']:
                 org = report.option_defaults['organization']
-                t.redirect_to(dguhelpers.relative_url_for(organization=org))
+                t.redirect_to(helpers.relative_url_for(organization=org))
         if 'organization' in t.request.params:
             # organization should only be in the url - let the param overwrite
             # the url.
-            t.redirect_to(dguhelpers.relative_url_for())
+            t.redirect_to(helpers.relative_url_for())
 
         # options
         c.options = report.add_defaults_to_options(t.request.params)
@@ -79,7 +79,7 @@ class ReportController(t.BaseController):
             c.options.pop('refresh')
             report.refresh_cache(c.options)
             # Don't want the refresh=1 in the url once it is done
-            t.redirect_to(dguhelpers.relative_url_for(refresh=None))
+            t.redirect_to(helpers.relative_url_for(refresh=None))
 
         # Check for any options not allowed by the report
         for key in c.options:
@@ -168,11 +168,18 @@ def ensure_data_is_dicts(data):
 
 def anonymise_user_names(data, organization=None):
     '''Ensure any columns with names in are anonymised, unless the current user
-    has privileges.'''
+    has privileges.
+
+    NB this is only enabled for data.gov.uk - it is custom functionality.
+    '''
+    try:
+        import ckanext.dgu.lib.helpers as dguhelpers
+    except ImportError:
+        # If this is not DGU then cannot do the anonymization
+        return
     column_names = data['table'][0].keys() if data['table'] else []
     for col in column_names:
         if col.lower() in ('user', 'username', 'user name', 'author'):
             for row in data['table']:
-                row[col] = dguhelpers.user_link_info(row[col],
-                              organisation=organization)[0]
-
+                row[col] = dguhelpers.user_link_info(
+                    row[col], organisation=organization)[0]
