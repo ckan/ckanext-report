@@ -1,9 +1,11 @@
-<html xmlns:py="http://genshi.edgewall.org/"
-  xmlns:i18n="http://genshi.edgewall.org/i18n"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  py:strip="">
-            <label class="checkbox">
-              <input type="checkbox" name="include_sub_organizations" value="${0 if c.options['include_sub_organizations'] else 1}" class="inline js-auto-submit" py:attrs="{'checked': 'checked'} if c.options['include_sub_organizations'] else {}"/>
-              Include results from sub-publishers
-            </label>
-</html>
+{#
+Option snippet - organization
+
+value - Value of this option
+#}
+<span class="form-select control-group control-organization">
+    <label class="checkbox">
+      <input type="checkbox" name="include_sub_organizations" value="1" class="inline js-auto-submit" {{ 'checked=checked' if value }} />
+      Include results from sub-publishers
+    </label>
+</span>

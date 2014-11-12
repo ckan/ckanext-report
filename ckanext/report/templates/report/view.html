@@ -1,60 +1,62 @@
-<html xmlns:py="http://genshi.edgewall.org/"
-  xmlns:i18n="http://genshi.edgewall.org/i18n"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  py:strip="">
+{% extends "page.html" %}
 
-  <py:def function="page_title">${c.report_title} - Report</py:def>
-  <py:match path="breadcrumbs">
-    <li><a href="${h.url_for('reports')}">Reports</a></li>
-    <li><a href="${request.url}">${c.report_title}</a></li>
-  </py:match>
+{% block title %}{{ c.report_title }} - {{ _('Reports') }} - {{ super() }}{% endblock %}
 
-  <div py:match="content" py:strip="">
-      <h1>${c.report_title}</h1>
-      <p>${c.report_description}</p>
+{% block breadcrumb_content %}
+  {{ h.build_nav('reports', _('Reports')) }}
+  {{ h.build_nav('report-org' if '/organization' in request.environ.get('PATH_INFO', '') else 'report', c.report_title, report_name=c.report_name) }}
+{% endblock%}
+
+{% block primary_content_inner %}
+      <h1>{{ c.report_title }}</h1>
+      <p>{{ c.report_description }}</p>
       <p>
-          Generated: ${h.render_datetime(c.report_date, '%d/%m/%Y %H:%M')}
+          {{ _('Generated') }}: {{ h.report__render_datetime(c.report_date, '%d/%m/%Y %H:%M') }}
       </p>
-      <div py:if="h.is_sysadmin()" class="panel panel-info" style="width=700px">
+      {% if c.userobj.sysadmin %}
+      <div class="panel panel-info" style="width=700px">
           <div class="panel-heading"><strong>Refresh report</strong></div>
           <div class="panel-body">
             <form action="" method="POST">
               <input type="submit" value="Refresh" class="btn btn-info pull-right" style="margin-left: 15px"/>
             </form>
-            <p>As a system administrator you are able to refresh this report on demand by clicking the 'Refresh' button.</p>
+            <p>{{ _('As a system administrator you are able to refresh this report on demand by clicking the \'Refresh\' button.') }}</p>
           </div>
       </div>
+      {% endif %}
 
       <h3>Options</h3>
       <form action="">
-          <div py:for="(key, value) in c.options.items()">
-            <py:if test="key in c.options_html">${c.options_html[key]}</py:if>
-            <py:if test="key not in c.options_html">
-              ${key}: ${value}
-              <input type="hidden" name="${key}" value="${value}"/>
-            </py:if>
-          </div>
+          {% for key, value in c.options.items() %}
+            {% if key in c.options_html %}
+              {{ c.options_html[key] }}
+            {% else %}
+              {{ key }}: {{ value }}
+              <input type="hidden" name="{{ key }}" value="{{ value }}"/>
+            {% endif %}
+          {% endfor %}
       </form>
 
-      <h3>Results</h3>
-      <py:if test="not c.are_some_results">
-        <p>No results found.</p>
-      </py:if>
-
-      <py:if test="c.are_some_results">
+      <h3>{{ _('Results') }}</h3>
+      {% if not c.are_some_results %}
+        <p>{{ _('No results found.') }}</p>
+      {% else %}
         <div class="pull-right">
-            Download:
-            <a class="btn btn-primary" href="${h.report__relative_url_for(format='csv')}">CSV</a>
-            <a class="btn btn-primary" href="${h.report__relative_url_for(format='json')}">JSON</a>
+            {{ _('Download') }}:
+            <a class="btn btn-primary" href="{{ h.report__relative_url_for(format='csv') }}">CSV</a>
+            <a class="btn btn-primary" href="{{ h.report__relative_url_for(format='json') }}">JSON</a>
         </div>
         <div>
-          ${c.report_snippet}
+          {% snippet c.report_template, table=c.data['table'], data=c.data, report_name=c.report_name %}
         </div>
-      </py:if>
+      {% endif %}
   </div>
+{% endblock%}
 
-  <py:def function="optional_footer">
+{% block scripts %}
+    {{ super() }}
     <!--! Tablesorter allows table sorting by clicking on each column -->
+    <link type="text/css" rel="stylesheet" media="all" href="/css/report.css" />
     <script type="text/javascript" src="/scripts/vendor/jquery.tablesorter.min.js"></script>
     <script type="text/javascript">
       //<![CDATA[
@@ -70,8 +72,5 @@
       );
     // ]]>
     </script>
-  </py:def>
+{% endblock%}
 
-  <xi:include href="../layout_base.html" />
-
-</html>

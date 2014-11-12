@@ -119,40 +119,46 @@ When you view a report, ckanext-report will automatically show the title, option
 The report template will probably display the incidental data and then the table:
 
 ```html
+{#
+Report (snippet)
+
+table - main data, as a list of rows, each row is a dict
+data - other data values, as a dict
+#}
 <ul>
-    <li>Datasets without tags: ${len(c.data['table'])} / ${c.data['num_packages']} (${c.data['packages_without_tags_percent']}%)</li>
-    <li>Average tags per package: ${c.data['average_tags_per_package']} tags</li>
+    <li>Datasets without tags: {{ table|length }} / {{ data['num_packages'] }} ({{ data['packages_without_tags_percent'] }})</li>
+    <li>Average tags per package: {{ data['average_tags_per_package'] }} tags</li>
 </ul>
 
 <table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
     <thead>
       <tr>
         <th>Dataset</th>
-        <th>User</th>
         <th>Notes</th>
+        <th>User</th>
         <th>Created</th>
       </tr>
     </thead>
     <tbody>
-      <py:for each="row in c.data['table']">
+      {% for row in table %}
         <tr>
           <td>
-            <a href="${h.url_for(controller='package', action='view', id=row['name'])}">
-              ${row['title']}
+            <a href="{{ h.url_for(controller='package', action='view', id=row.name) }}">
+              {{ row.title }}
             </a>
           </td>
-          <td>${row['notes']}</td>
-          <td>${h.linked_user(row['user'])}</td>
-          <td>${h.render_datetime(row['created'])}</td>
+          <td>{{ row.notes }}</td>
+          <td>{{ h.linked_user(row.user) }}</td>
+          <td>{{ h.render_datetime(row.created) }}</td>
         </tr>
-      </py:for>
+      {% endfor %}
     </tbody>
 </table>
 ```
 
 The convention is to put the report templates in: `ckanext/<extension>/templates/report/<report_name>.html`
 
-Note: currently ckanext-report has Genshi templates, due to the author still using legacy templates from pre-CKAN 1.8. Feel free to update them to Jinja, used by CKAN 2+ - there isn't a lot to change.
+Note: currently ckanext-report has not been styled yet for the core CKAN templates, due to the author using custom templates. Feel free to add styling.
 
 ## Registration
 

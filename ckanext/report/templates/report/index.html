@@ -1,38 +1,34 @@
-<html xmlns:py="http://genshi.edgewall.org/"
-  xmlns:i18n="http://genshi.edgewall.org/i18n"
-  xmlns:xi="http://www.w3.org/2001/XInclude"
-  py:strip="">
+{% extends "page.html" %}
 
-  <py:def function="page_title">Reports</py:def>
+{% block title %}{{ _('Reports') }} - {{ super() }}{% endblock %}
 
-  <py:match path="breadcrumbs">
-    <li><a href="${h.url_for('reports')}">Reports</a></li>
-  </py:match>
+{% block breadcrumb_content %}
+  {{ h.build_nav('reports', _('Reports')) }}
+{% endblock %}
 
-  <div py:match="content" class="dataset">
+{% block primary_content_inner %}
+  <div class="dataset">
     <div class="row">
-      <py:for each="i in range(len(c.reports))">
-        <div class="clearfix visible-lg" py:if="i%4==0"></div>
-        <div class="clearfix visible-md clearfix-ie7" py:if="i%3==0"></div>
-        <div class="clearfix visible-sm" py:if="i%2==0"></div>
-        <div py:with="report = c.reports[i]" class="col-lg-3 col-md-4 col-sm-6">
+      {% for report in c.reports %}
+        {% if loop.index0%4==0 %}<div class="clearfix visible-lg"></div>{% endif %}
+        {% if loop.index0%3==0 %}<div class="clearfix visible-md clearfix-ie7"></div>{% endif %}
+        {% if loop.index0%2==0 %}<div class="clearfix visible-sm"></div>{% endif %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+          {% set report_url=h.url_for('report', report_name=report.name, **h.report__explicit_default_options(report.name)) %}
           <div class="report-summary">
-            <a href="${h.url_for('report', report_name=report.name)}" class="report-header">
-              <div class="report-title">${report.title}</div>
+            <a href="{{ report_url }}" class="report-header">
+              <div class="report-title">{{ report.title }}</div>
             </a>
             <div class="report-body">
-              <div class="report-description">${report.description}</div>
+              <div class="report-description">{{ report.description }}</div>
               <div class="clearfix clearfix-ie7"> &nbsp;</div>
-              <a class="view-report-link" href="${h.url_for('report', report_name=report.name)}">
-                View Report
+              <a class="view-report-link" href="{{ report_url }}">
+                {{ _('View Report') }}
               </a>
             </div>
           </div>
         </div>
-      </py:for>
+      {% endfor %}
     </div>
   </div>
-  <xi:include href="../layout_base.html" />
-
-</html>
-
+{% endblock%}

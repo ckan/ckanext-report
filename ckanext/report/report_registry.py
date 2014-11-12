@@ -2,6 +2,8 @@ import logging
 import copy
 import re
 
+from paste.deploy.converters import asbool
+
 from ckan import model
 from ckan.common import OrderedDict
 from ckanext.report.interfaces import IReport
@@ -120,8 +122,29 @@ class Report(object):
         return self.template
 
     def add_defaults_to_options(self, options):
+        '''Returns the options, using option values passed in and falling back
+        to the default values for that report.
+
+        When a option needs a boolean, an option passed in as 0 or 1 are
+        converted to True/False, which suits when the options passed in are URL
+        parameters.
+        '''
         defaulted_options = copy.deepcopy(self.option_defaults)
-        defaulted_options.update(options)
+        for key in defaulted_options:
+            if not key in options:
+                if defaulted_options[key] is True:
+                    # Checkboxes don't submit a value when False, so cannot
+                    # default to True. i.e. to get a True value, you always
+                    # need be expicit in the params.
+                    defaulted_options[key] = False
+                continue
+            value = options[key]
+            if isinstance(defaulted_options[key], bool):
+                defaulted_options[key] = asbool(value)
+            else:
+                defaulted_options[key] = value
+        for key in set(options) - set(defaulted_options):
+            defaulted_options[key] = options[key]
         return defaulted_options
 
 

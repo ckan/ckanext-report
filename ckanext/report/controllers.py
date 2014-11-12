@@ -41,19 +41,21 @@ class ReportController(t.BaseController):
 
         # options
         c.options = report.add_defaults_to_options(t.request.params)
+        option_display_params = {}
         if 'format' in c.options:
             format = c.options.pop('format')
         else:
             format = None
         if 'organization' in report.option_defaults:
             c.options['organization'] = organization
-            c.offer_organization_index = \
-                report.option_defaults['organization'] is None
         c.options_html = {}
         for option in c.options:
+            option_display_params = {'value': c.options[option],
+                                     'default': report.option_defaults[option]}
             try:
                 c.options_html[option] = \
-                    t.render_snippet('report/option_%s.html' % option)
+                    t.render_snippet('report/option_%s.html' % option,
+                                     data=option_display_params)
             except TemplateNotFound:
                 continue
         c.report_title = report.title
@@ -106,10 +108,7 @@ class ReportController(t.BaseController):
 
         c.are_some_results = bool(c.data['table'] if 'table' in c.data
                                   else c.data)
-        if c.are_some_results:
-            # you can't pass args into genshi template, so it will just look
-            # for c.data
-            c.report_snippet = t.render_snippet(report.get_template())
+        c.report_template = report.get_template()
         return t.render('report/view.html')
 
 
