@@ -15,11 +15,10 @@ class ReportController(t.BaseController):
 
     def index(self):
         registry = ReportRegistry.instance()
-        c.reports = registry.get_reports()
-        return t.render('report/index.html')
+        reports = registry.get_reports()
+        return t.render('report/index.html', extra_vars={'reports': reports})
 
     def view(self, report_name, organization=None, refresh=False):
-        c.report_name = report_name
         try:
             report = ReportRegistry.instance().get_report(report_name)
         except KeyError:
@@ -40,32 +39,31 @@ class ReportController(t.BaseController):
             t.redirect_to(helpers.relative_url_for())
 
         # options
-        c.options = report.add_defaults_to_options(t.request.params)
+        options = report.add_defaults_to_options(t.request.params)
         option_display_params = {}
-        if 'format' in c.options:
-            format = c.options.pop('format')
+        if 'format' in options:
+            format = options.pop('format')
         else:
             format = None
         if 'organization' in report.option_defaults:
-            c.options['organization'] = organization
-        c.options_html = {}
-        for option in c.options:
-            option_display_params = {'value': c.options[option],
+            options['organization'] = organization
+        options_html = {}
+        c.options = options  # for legacy genshi snippets
+        for option in options:
+            option_display_params = {'value': options[option],
                                      'default': report.option_defaults[option]}
             try:
-                c.options_html[option] = \
+                options_html[option] = \
                     t.render_snippet('report/option_%s.html' % option,
                                      data=option_display_params)
             except TemplateNotFound:
                 continue
-        c.report_title = report.title
-        c.report_description = report.description
 
         # Refresh the cache if requested
         if t.request.method == 'POST' and not format:
             if not (c.userobj and c.userobj.sysadmin):
                 t.abort(401)
-            report.refresh_cache(c.options)
+            report.refresh_cache(options)
 
         # Alternative way to refresh the cache - not in the UI, but is
         # handy for testing
@@ -76,40 +74,48 @@ class ReportController(t.BaseController):
         if refresh:
             if not (c.userobj and c.userobj.sysadmin):
                 t.abort(401)
-            c.options.pop('refresh')
-            report.refresh_cache(c.options)
+            options.pop('refresh')
+            report.refresh_cache(options)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 
         # Check for any options not allowed by the report
-        for key in c.options:
+        for key in options:
             if key not in report.option_defaults:
                 t.abort(400, 'Option not allowed by report: %s' % key)
 
         try:
-            c.data, c.report_date = report.get_fresh_report(**c.options)
+            data, report_date = report.get_fresh_report(**options)
         except t.ObjectNotFound:
             t.abort(404)
 
         if format and format != 'html':
-            ensure_data_is_dicts(c.data)
-            anonymise_user_names(c.data, organization=c.options.get('organization'))
+            ensure_data_is_dicts(data)
+            anonymise_user_names(data, organization=options.get('organization'))
             if format == 'csv':
-                filename = 'report_%s.csv' % report.generate_key(c.options).replace('?', '_')
+                filename = 'report_%s.csv' % report.generate_key(options).replace('?', '_')
                 t.response.headers['Content-Type'] = 'application/csv'
                 t.response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
-                return make_csv_from_dicts(c.data['table'])
+                return make_csv_from_dicts(data['table'])
             elif format == 'json':
                 t.response.headers['Content-Type'] = 'application/json'
-                c.data['generated_at'] = c.report_date
-                return json.dumps(c.data, cls=DateTimeJsonEncoder)
+                data['generated_at'] = report_date
+                return json.dumps(data, cls=DateTimeJsonEncoder)
             else:
                 t.abort(400, 'Format not known - try html, json or csv')
 
-        c.are_some_results = bool(c.data['table'] if 'table' in c.data
-                                  else c.data)
-        c.report_template = report.get_template()
-        return t.render('report/view.html')
+        are_some_results = bool(data['table'] if 'table' in data
+                                else data)
+        report_template = report.get_template()
+        # A couple of context variables for legacy genshi reports
+        c.data = data
+        c.options = options
+        return t.render('report/view.html', extra_vars={
+            'report': report, 'report_name': report_name, 'data': data,
+            'report_date': report_date, 'options': options,
+            'options_html': options_html,
+            'report_template': report_template,
+            'are_some_results': are_some_results})
 
 
 def make_csv_from_dicts(rows):

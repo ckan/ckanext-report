@@ -1,17 +1,17 @@
 {% extends "page.html" %}
 
-{% block title %}{{ c.report_title }} - {{ _('Reports') }} - {{ super() }}{% endblock %}
+{% block title %}{{ report.title }} - {{ _('Reports') }} - {{ super() }}{% endblock %}
 
 {% block breadcrumb_content %}
   {{ h.build_nav('reports', _('Reports')) }}
-  {{ h.build_nav('report-org' if '/organization' in request.environ.get('PATH_INFO', '') else 'report', c.report_title, report_name=c.report_name) }}
+  {{ h.build_nav('report-org' if '/organization' in request.environ.get('PATH_INFO', '') else 'report', report.title, report_name=report_name) }}
 {% endblock%}
 
 {% block primary_content_inner %}
-      <h1>{{ c.report_title }}</h1>
-      <p>{{ c.report_description }}</p>
+      <h1>{{ report.title }}</h1>
+      <p>{{ report.description }}</p>
       <p>
-          {{ _('Generated') }}: {{ h.report__render_datetime(c.report_date, '%d/%m/%Y %H:%M') }}
+          {{ _('Generated') }}: {{ h.report__render_datetime(report_date, '%d/%m/%Y %H:%M') }}
       </p>
       {% if c.userobj.sysadmin %}
       <div class="panel panel-info" style="width=700px">
@@ -25,11 +25,11 @@
       </div>
       {% endif %}
 
-      <h3>Options</h3>
+      <h3>{{ _('Options') }}</h3>
       <form action="">
-          {% for key, value in c.options.items() %}
-            {% if key in c.options_html %}
-              {{ c.options_html[key] }}
+          {% for key, value in options.items() %}
+            {% if key in options_html %}
+              {{ options_html[key]|safe }}
             {% else %}
               {{ key }}: {{ value }}
               <input type="hidden" name="{{ key }}" value="{{ value }}"/>
@@ -38,7 +38,7 @@
       </form>
 
       <h3>{{ _('Results') }}</h3>
-      {% if not c.are_some_results %}
+      {% if not are_some_results %}
         <p>{{ _('No results found.') }}</p>
       {% else %}
         <div class="pull-right">
@@ -47,7 +47,7 @@
             <a class="btn btn-primary" href="{{ h.report__relative_url_for(format='json') }}">JSON</a>
         </div>
         <div>
-          {% snippet c.report_template, table=c.data['table'], data=c.data, report_name=c.report_name %}
+          {% snippet report_template, table=data['table'], data=data, report_name=report_name %}
         </div>
       {% endif %}
   </div>

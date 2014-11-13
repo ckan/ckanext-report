@@ -34,7 +34,7 @@ def tagless_report(organization, include_sub_organizations=False):
             ('notes', lib.dataset_notes(pkg)),
             ('user', pkg.creator_user_id),
             ('created', pkg.metadata_created.isoformat()),
-            )) for pkg in q.all()]
+            )) for pkg in q.slice(0, 100)]  # First 100 only for this demo
 
     # Average number of tags per package
     q = model.Session.query(model.Package)
