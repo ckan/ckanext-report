@@ -21,7 +21,7 @@ TODO:
 
 Compatibility: Requires CKAN version 2.1 or later (but can be easily adapted for older versions).
 
-Status: in production at data.gov.uk but that site uses Genshi templates (for historical reasons) so for others to use it the report template needs a bit of conversion to Jinja, whicih shouldn't be at all hard.
+Status: in production at data.gov.uk but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/yaditi/ckanext-report/tree/geoversion
 
 Author(s): David Read
 

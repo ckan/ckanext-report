@@ -1,6 +1,6 @@
 import datetime
-import json
 
+from ckan.lib.helpers import json
 import ckan.plugins.toolkit as t
 import ckanext.report.helpers as helpers
 from ckanext.report.report_registry import ReportRegistry
