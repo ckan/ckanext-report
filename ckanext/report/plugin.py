@@ -2,7 +2,9 @@ import ckan.plugins as p
 from ckanext.report.interfaces import IReport
 
 import ckanext.report.logic.action.get as action_get
+import ckanext.report.logic.action.update as action_update
 import ckanext.report.logic.auth.get as auth_get
+import ckanext.report.logic.auth.update as auth_update
 
 class ReportPlugin(p.SingletonPlugin):
     p.implements(p.IRoutes, inherit=True)
@@ -43,11 +45,19 @@ class ReportPlugin(p.SingletonPlugin):
 
     # IActions
     def get_actions(self):
-        return {'report_list': action_get.report_list}
+        return {'report_list': action_get.report_list,
+                'report_get': action_get.report_get,
+                'report_data_get': action_get.report_data_get,
+                'report_key_get': action_get.report_key_get,
+                'report_refresh': action_update.report_refresh}
 
     # IAuthFunctions
     def get_auth_functions(self):
-        return {'report_list': auth_get.report_list}
+        return {'report_list': auth_get.report_list,
+                'report_get': auth_get.report_get,
+                'report_data_get': auth_get.report_data_get,
+                'report_key_get': auth_get.report_key_get,
+                'report_refresh': auth_update.report_refresh}
 
 
 class TaglessReportPlugin(p.SingletonPlugin):

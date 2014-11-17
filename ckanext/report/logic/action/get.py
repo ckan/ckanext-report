@@ -11,3 +11,39 @@ def report_list(context=None, data_dict=None):
     return [{'name': report.name, 
              'title': report.title, 
              'description': report.description} for report in reports]
+
+@logic.side_effect_free
+def report_get(context=None, data_dict=None):
+    logic.check_access('report_get', context, data_dict)
+
+    report_name = data_dict.get('report_name')
+
+    report = ReportRegistry.instance().get_report(report_name)
+
+    return {'name': report.name,
+            'title': report.title,
+            'description': report.description,
+            'option_defaults': report.option_defaults,
+            'template': report.get_template()}
+
+@logic.side_effect_free
+def report_data_get(context=None, data_dict=None):
+    logic.check_access('report_data_get', context, data_dict)
+
+    report_name = data_dict.get('report_name')
+    options = data_dict.get('options')
+
+    report = ReportRegistry.instance().get_report(report_name)
+
+    return report.get_fresh_report(**options)
+
+@logic.side_effect_free
+def report_key_get(context=None, data_dict=None)
+    logic.check_access('report_key_get', context, data_dict)
+
+    report_name = data_dict.get('report_name')
+    options = data_dict.get('options')
+
+    report = ReportRegistry.instance().get_report(report_name)
+
+    return report.generate_key(options).replace('?', '_')

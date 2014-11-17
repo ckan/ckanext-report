@@ -121,7 +121,8 @@ class Report(object):
     def get_template(self):
         return self.template
 
-    def add_defaults_to_options(self, options):
+    @staticmethod
+    def add_defaults_to_options(options, defaults):
         '''Returns the options, using option values passed in and falling back
         to the default values for that report.
 
@@ -129,7 +130,7 @@ class Report(object):
         converted to True/False, which suits when the options passed in are URL
         parameters.
         '''
-        defaulted_options = copy.deepcopy(self.option_defaults)
+        defaulted_options = copy.deepcopy(defaults)
         for key in defaulted_options:
             if not key in options:
                 if defaulted_options[key] is True:
