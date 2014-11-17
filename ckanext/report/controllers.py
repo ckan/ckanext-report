@@ -15,16 +15,8 @@ c = t.c
 class ReportController(t.BaseController):
 
     def index(self):
-        context = {'model': model,
-                   'session': model.Session,
-                   'user': c.user}
-
-        if t.check_access('report_list', context):
-            reports = t.get_action('report_list')()
-            print "REPORTS = ", reports
-            return t.render('report/index.html', extra_vars={'reports': reports})
-        else:
-            t.abort(401)
+        reports = t.get_action('report_list')({}, {})
+        return t.render('report/index.html', extra_vars={'reports': reports})
 
     def view(self, report_name, organization=None, refresh=False):
         try:
