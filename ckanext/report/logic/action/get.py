@@ -31,14 +31,16 @@ def report_data_get(context=None, data_dict=None):
     logic.check_access('report_data_get', context, data_dict)
 
     report_name = data_dict.get('report_name')
-    options = data_dict.get('options')
+    options = data_dict.get('options', {})
 
     report = ReportRegistry.instance().get_report(report_name)
 
-    return report.get_fresh_report(**options)
+    data, date = report.get_fresh_report(**options)
+
+    return data, date.isoformat()
 
 @logic.side_effect_free
-def report_key_get(context=None, data_dict=None)
+def report_key_get(context=None, data_dict=None):
     logic.check_access('report_key_get', context, data_dict)
 
     report_name = data_dict.get('report_name')

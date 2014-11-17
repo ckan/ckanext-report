@@ -61,7 +61,8 @@ class ReportController(t.BaseController):
         # handy for testing
         try:
             refresh = t.asbool(t.request.params.get('refresh'))
-            options.pop('refresh')
+            if 'refresh' in options:
+                options.pop('refresh')
         except ValueError:
             refresh = False
 
