@@ -1,10 +1,15 @@
 import ckan.plugins as p
 from ckanext.report.interfaces import IReport
 
+import ckanext.report.logic.action.get as action_get
+import ckanext.report.logic.auth.get as auth_get
+
 class ReportPlugin(p.SingletonPlugin):
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
+    p.implements(p.IActions, inherit=True)
+    p.implements(p.IAuthFunctions, inherit=True)
 
     # IRoutes
 
@@ -35,6 +40,14 @@ class ReportPlugin(p.SingletonPlugin):
             'report__render_datetime': h.render_datetime,
             'report__explicit_default_options': h.explicit_default_options,
             }
+
+    # IActions
+    def get_actions(self):
+        return {'report_list': action_get.report_list}
+
+    # IAuthFunctions
+    def get_auth_functions(self):
+        return {'report_list': auth_get.report_list}
 
 
 class TaglessReportPlugin(p.SingletonPlugin):

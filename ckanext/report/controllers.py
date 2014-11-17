@@ -7,6 +7,7 @@ from ckanext.report.report_registry import ReportRegistry
 from ckan.lib.render import TemplateNotFound
 from ckanext.report.json_utils import DateTimeJsonEncoder
 from ckan.common import OrderedDict
+from ckan import model
 
 c = t.c
 
@@ -14,9 +15,16 @@ c = t.c
 class ReportController(t.BaseController):
 
     def index(self):
-        registry = ReportRegistry.instance()
-        reports = registry.get_reports()
-        return t.render('report/index.html', extra_vars={'reports': reports})
+        context = {'model': model,
+                   'session': model.Session,
+                   'user': c.user}
+
+        if t.check_access('report_list', context):
+            reports = t.get_action('report_list')()
+            print "REPORTS = ", reports
+            return t.render('report/index.html', extra_vars={'reports': reports})
+        else:
+            t.abort(401)
 
     def view(self, report_name, organization=None, refresh=False):
         try:
