@@ -15,11 +15,18 @@ c = t.c
 class ReportController(t.BaseController):
 
     def index(self):
-        reports = t.get_action('report_list')({}, {})
+        try:
+            reports = t.get_action('report_list')({}, {})
+        except t.NotAuthorized:
+            t.abort(403)
+
         return t.render('report/index.html', extra_vars={'reports': reports})
 
     def view(self, report_name, organization=None, refresh=False):
-        report = t.get_action('report_get')({}, {'report_name': report_name})
+        try:
+            report = t.get_action('report_get')({}, {'report_name': report_name})
+        except t.NotAuthorized:
+            t.abort(403)
 
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \
@@ -71,7 +78,10 @@ class ReportController(t.BaseController):
             refresh = True
 
         if refresh:
-            t.get_action('report_refresh')({}, {'report_name': report_name, 'options': options})
+            try:
+               t.get_action('report_refresh')({}, {'report_name': report_name, 'options': options})
+            except t.NotAuthorized:
+               t.abort(403)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 
@@ -84,12 +94,17 @@ class ReportController(t.BaseController):
             data, report_date = t.get_action('report_data_get')({}, {'report_name': report_name, 'options': options})
         except t.ObjectNotFound:
             t.abort(404)
+        except t.NotAuthorized:
+            t.abort(403)
 
         if format and format != 'html':
             ensure_data_is_dicts(data)
             anonymise_user_names(data, organization=options.get('organization'))
             if format == 'csv':
-                key = t.get_action('report_key_get')({}, {'report_name': report_name, 'options': options})
+                try:
+                    key = t.get_action('report_key_get')({}, {'report_name': report_name, 'options': options})
+                except t.NotAuthorized:
+                    t.abort(403)
                 filename = 'report_%s.csv' % key
                 t.response.headers['Content-Type'] = 'application/csv'
                 t.response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
