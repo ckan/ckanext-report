@@ -24,7 +24,7 @@ class ReportController(t.BaseController):
 
     def view(self, report_name, organization=None, refresh=False):
         try:
-            report = t.get_action('report_get')({}, {'report_name': report_name})
+            report = t.get_action('report_show')({}, {'report_name': report_name})
         except t.NotAuthorized:
             t.abort(403)
 

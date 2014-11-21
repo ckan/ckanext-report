@@ -46,7 +46,7 @@ class ReportPlugin(p.SingletonPlugin):
     # IActions
     def get_actions(self):
         return {'report_list': action_get.report_list,
-                'report_get': action_get.report_get,
+                'report_show': action_get.report_show,
                 'report_data_get': action_get.report_data_get,
                 'report_key_get': action_get.report_key_get,
                 'report_refresh': action_update.report_refresh}
@@ -54,7 +54,7 @@ class ReportPlugin(p.SingletonPlugin):
     # IAuthFunctions
     def get_auth_functions(self):
         return {'report_list': auth_get.report_list,
-                'report_get': auth_get.report_get,
+                'report_show': auth_get.report_show,
                 'report_data_get': auth_get.report_data_get,
                 'report_key_get': auth_get.report_key_get,
                 'report_refresh': auth_update.report_refresh}

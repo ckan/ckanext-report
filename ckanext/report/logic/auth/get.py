@@ -6,7 +6,7 @@ def report_list(context=None, data_dict=None):
     return {'success': True}
 
 @auth_allow_anonymous_access
-def report_get(context=None, data_dict=None):
+def report_show(context=None, data_dict=None):
     return {'success': True}
 
 @auth_allow_anonymous_access
@@ -17,7 +17,7 @@ def report_data_get(context=None, data_dict=None):
 
     if hasattr(report, 'authorize'):
         user = context['auth_user_obj']
-        options =  data_dict['options']
+        options = data_dict['options']
         if not report.authorize(user, options):
             return {'success': False}
 

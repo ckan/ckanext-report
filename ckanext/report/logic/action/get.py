@@ -13,8 +13,8 @@ def report_list(context=None, data_dict=None):
              'description': report.description} for report in reports]
 
 @logic.side_effect_free
-def report_get(context=None, data_dict=None):
-    logic.check_access('report_get', context, data_dict)
+def report_show(context=None, data_dict=None):
+    logic.check_access('report_show', context, data_dict)
 
     report_name = data_dict.get('report_name')
 
