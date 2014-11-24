@@ -6,6 +6,9 @@ import ckan.logic as logic
 def report_list(context=None, data_dict=None):
     """
     Lists all available reports
+
+    :returns: A list of report dictionaries (see report_show)
+    :rtype: list
     """
     logic.check_access('report_list', context, data_dict)
         
@@ -23,7 +26,11 @@ def report_show(context=None, data_dict=None):
     Does not provide the data for the report which must be obtained by a
     separate call to report_data_get.
 
-    The name of the report is required as a parameter in the data_dict
+    :param report_name: The name of the report
+    :type report_name: string
+
+    :returns: A dictionary of information about the report
+    :rtype: dictionary
     """
     logic.check_access('report_show', context, data_dict)
 
@@ -45,10 +52,14 @@ def report_data_get(context=None, data_dict=None):
     The data may have been cached in the database or may have been generated on
     demand so the date when the data was generated is also returned
 
-    The name of the report is required as a parameter in the data_dict
+    :param report_name: The name of the report
+    :type report_name: string
 
-    Optionally you may provide an 'options' key in the data_dict which should
-    be a dictionary of options which are passed to the report
+    :param options: Dictionary of options to pass to the report (optional)
+    :type options: dict
+
+    :returns: A list containing the data and the date on which it was created
+    :rtype: list
     """
     logic.check_access('report_data_get', context, data_dict)
 
@@ -66,9 +77,14 @@ def report_key_get(context=None, data_dict=None):
     """
     Returns a key that will identify the report and options
 
-    The name of the report is required as a parameter in the data_dict
+    :param report_name: The name of the report
+    :type report_name: string
 
-    A dictionary of options is required as a parameter in the data_dict
+    :param options: Dictionary of options to pass to the report
+    :type options: dict
+
+    :returns: A key to identify the report 
+    :rtype: string
     """
     logic.check_access('report_key_get', context, data_dict)
 
