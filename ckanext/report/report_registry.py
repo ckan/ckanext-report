@@ -146,6 +146,13 @@ class Report(object):
             defaulted_options[key] = options[key]
         return defaulted_options
 
+    def as_dict(self):
+        return {'name': self.name,
+                'title': self.title,
+                'description': self.description,
+                'option_defaults': self.option_defaults,
+                'template': self.get_template()}
+
 
 def extract_entity_name(option_dict):
     '''Hunts for an option key that is the entity name and returns its

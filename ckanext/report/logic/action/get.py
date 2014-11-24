@@ -14,9 +14,7 @@ def report_list(context=None, data_dict=None):
         
     registry = ReportRegistry.instance()
     reports = registry.get_reports()
-    return [{'name': report.name, 
-             'title': report.title, 
-             'description': report.description} for report in reports]
+    return [report.as_dict() for report in reports]
 
 @logic.side_effect_free
 def report_show(context=None, data_dict=None):
@@ -38,11 +36,7 @@ def report_show(context=None, data_dict=None):
 
     report = ReportRegistry.instance().get_report(report_name)
 
-    return {'name': report.name,
-            'title': report.title,
-            'description': report.description,
-            'option_defaults': report.option_defaults,
-            'template': report.get_template()}
+    return report.as_dict()
 
 @logic.side_effect_free
 def report_data_get(context=None, data_dict=None):
