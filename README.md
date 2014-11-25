@@ -207,6 +207,7 @@ Required keys:
 * name - forms part of the URL
 * title (optional) - this is the report title as it is displayed. Defaults to name, capitalized and with dashes changed to spaces.
 * description (optional) - this is displayed in the report list page and on the report page.
+* authorize (optional) - a function that says if the user is allowed to view the report. Takes params: (user_object, options_dict) and should return a boolean - if the user is authorized or not.
 * generate - function returning the report data
 * template - filepath of the report HTML template
 * option_defaults - dict of ALL option names and their default values. Use ckan.common.OrderedDict. If there are no options, you can return None.
