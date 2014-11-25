@@ -1,5 +1,5 @@
 from ckanext.report.report_registry import ReportRegistry
-from ckan.logic import auth_allow_anonymous_access
+from ckan.logic import auth_allow_anonymous_access, get_or_bust
 
 @auth_allow_anonymous_access
 def report_list(context=None, data_dict=None):
@@ -11,9 +11,9 @@ def report_show(context=None, data_dict=None):
 
 @auth_allow_anonymous_access
 def report_data_get(context=None, data_dict=None):
-    report_name = data_dict.get('report_name')
+    id = get_or_bust(data_dict, 'id')
 
-    report = ReportRegistry.instance().get_report(report_name)
+    report = ReportRegistry.instance().get_report(id)
 
     if hasattr(report, 'authorize'):
         user = context['auth_user_obj']
