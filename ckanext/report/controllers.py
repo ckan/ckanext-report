@@ -24,7 +24,7 @@ class ReportController(t.BaseController):
 
     def view(self, report_name, organization=None, refresh=False):
         try:
-            report = t.get_action('report_show')({}, {'report_name': report_name})
+            report = t.get_action('report_show')({}, {'id': report_name})
         except t.NotAuthorized:
             t.abort(403)
 
@@ -79,7 +79,7 @@ class ReportController(t.BaseController):
 
         if refresh:
             try:
-               t.get_action('report_refresh')({}, {'report_name': report_name, 'options': options})
+               t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
             except t.NotAuthorized:
                t.abort(403)
             # Don't want the refresh=1 in the url once it is done
@@ -91,7 +91,7 @@ class ReportController(t.BaseController):
                 t.abort(400, 'Option not allowed by report: %s' % key)
 
         try:
-            data, report_date = t.get_action('report_data_get')({}, {'report_name': report_name, 'options': options})
+            data, report_date = t.get_action('report_data_get')({}, {'id': report_name, 'options': options})
         except t.ObjectNotFound:
             t.abort(404)
         except t.NotAuthorized:
@@ -102,7 +102,7 @@ class ReportController(t.BaseController):
             anonymise_user_names(data, organization=options.get('organization'))
             if format == 'csv':
                 try:
-                    key = t.get_action('report_key_get')({}, {'report_name': report_name, 'options': options})
+                    key = t.get_action('report_key_get')({}, {'id': report_name, 'options': options})
                 except t.NotAuthorized:
                     t.abort(403)
                 filename = 'report_%s.csv' % key

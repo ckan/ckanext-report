@@ -24,17 +24,17 @@ def report_show(context=None, data_dict=None):
     Does not provide the data for the report which must be obtained by a
     separate call to report_data_get.
 
-    :param report_name: The name of the report
-    :type report_name: string
+    :param id: The name of the report
+    :type id: string
 
     :returns: A dictionary of information about the report
     :rtype: dictionary
     """
     logic.check_access('report_show', context, data_dict)
 
-    report_name = data_dict.get('report_name')
+    id = logic.get_or_bust(data_dict, 'id')
 
-    report = ReportRegistry.instance().get_report(report_name)
+    report = ReportRegistry.instance().get_report(id)
 
     return report.as_dict()
 
@@ -46,8 +46,8 @@ def report_data_get(context=None, data_dict=None):
     The data may have been cached in the database or may have been generated on
     demand so the date when the data was generated is also returned
 
-    :param report_name: The name of the report
-    :type report_name: string
+    :param id: The name of the report
+    :type id: string
 
     :param options: Dictionary of options to pass to the report (optional)
     :type options: dict
@@ -57,10 +57,10 @@ def report_data_get(context=None, data_dict=None):
     """
     logic.check_access('report_data_get', context, data_dict)
 
-    report_name = data_dict.get('report_name')
+    id = logic.get_or_bust(data_dict, 'id')
     options = data_dict.get('options', {})
 
-    report = ReportRegistry.instance().get_report(report_name)
+    report = ReportRegistry.instance().get_report(id)
 
     data, date = report.get_fresh_report(**options)
 
@@ -71,8 +71,8 @@ def report_key_get(context=None, data_dict=None):
     """
     Returns a key that will identify the report and options
 
-    :param report_name: The name of the report
-    :type report_name: string
+    :param id: The name of the report
+    :type id: string
 
     :param options: Dictionary of options to pass to the report
     :type options: dict
@@ -82,9 +82,9 @@ def report_key_get(context=None, data_dict=None):
     """
     logic.check_access('report_key_get', context, data_dict)
 
-    report_name = data_dict.get('report_name')
+    id = logic.get_or_bust(data_dict, 'id')
     options = data_dict.get('options')
 
-    report = ReportRegistry.instance().get_report(report_name)
+    report = ReportRegistry.instance().get_report(id)
 
     return report.generate_key(options).replace('?', '_')
