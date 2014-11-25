@@ -3,10 +3,11 @@ import datetime
 from ckan.lib.helpers import json
 import ckan.plugins.toolkit as t
 import ckanext.report.helpers as helpers
-from ckanext.report.report_registry import ReportRegistry
+from ckanext.report.report_registry import Report
 from ckan.lib.render import TemplateNotFound
 from ckanext.report.json_utils import DateTimeJsonEncoder
 from ckan.common import OrderedDict
+from ckan import model
 
 c = t.c
 
@@ -14,24 +15,27 @@ c = t.c
 class ReportController(t.BaseController):
 
     def index(self):
-        registry = ReportRegistry.instance()
-        reports = registry.get_reports()
+        try:
+            reports = t.get_action('report_list')({}, {})
+        except t.NotAuthorized:
+            t.abort(403)
+
         return t.render('report/index.html', extra_vars={'reports': reports})
 
     def view(self, report_name, organization=None, refresh=False):
         try:
-            report = ReportRegistry.instance().get_report(report_name)
-        except KeyError:
-            t.abort(404, 'Report not found')
+            report = t.get_action('report_show')({}, {'id': report_name})
+        except t.NotAuthorized:
+            t.abort(403)
 
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \
-            'organization' not in report.option_defaults:
+            'organization' not in report['option_defaults']:
                 t.redirect_to(helpers.relative_url_for(organization=None))
         elif 'organization' not in t.request.environ['pylons.routes_dict'] and\
-            'organization' in report.option_defaults and \
-            report.option_defaults['organization']:
-                org = report.option_defaults['organization']
+            'organization' in report['option_defaults'] and \
+            report['option_defaults']['organization']:
+                org = report['option_defaults']['organization']
                 t.redirect_to(helpers.relative_url_for(organization=org))
         if 'organization' in t.request.params:
             # organization should only be in the url - let the param overwrite
@@ -39,19 +43,19 @@ class ReportController(t.BaseController):
             t.redirect_to(helpers.relative_url_for())
 
         # options
-        options = report.add_defaults_to_options(t.request.params)
+        options = Report.add_defaults_to_options(t.request.params, report['option_defaults'])
         option_display_params = {}
         if 'format' in options:
             format = options.pop('format')
         else:
             format = None
-        if 'organization' in report.option_defaults:
+        if 'organization' in report['option_defaults']:
             options['organization'] = organization
         options_html = {}
         c.options = options  # for legacy genshi snippets
         for option in options:
             option_display_params = {'value': options[option],
-                                     'default': report.option_defaults[option]}
+                                     'default': report['option_defaults'][option]}
             try:
                 options_html[option] = \
                     t.render_snippet('report/option_%s.html' % option,
@@ -59,41 +63,49 @@ class ReportController(t.BaseController):
             except TemplateNotFound:
                 continue
 
-        # Refresh the cache if requested
-        if t.request.method == 'POST' and not format:
-            if not (c.userobj and c.userobj.sysadmin):
-                t.abort(401)
-            report.refresh_cache(options)
 
         # Alternative way to refresh the cache - not in the UI, but is
         # handy for testing
         try:
             refresh = t.asbool(t.request.params.get('refresh'))
+            if 'refresh' in options:
+                options.pop('refresh')
         except ValueError:
             refresh = False
+
+        # Refresh the cache if requested
+        if t.request.method == 'POST' and not format:
+            refresh = True
+
         if refresh:
-            if not (c.userobj and c.userobj.sysadmin):
-                t.abort(401)
-            options.pop('refresh')
-            report.refresh_cache(options)
+            try:
+               t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
+            except t.NotAuthorized:
+               t.abort(403)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 
         # Check for any options not allowed by the report
         for key in options:
-            if key not in report.option_defaults:
+            if key not in report['option_defaults']:
                 t.abort(400, 'Option not allowed by report: %s' % key)
 
         try:
-            data, report_date = report.get_fresh_report(**options)
+            data, report_date = t.get_action('report_data_get')({}, {'id': report_name, 'options': options})
         except t.ObjectNotFound:
             t.abort(404)
+        except t.NotAuthorized:
+            t.abort(403)
 
         if format and format != 'html':
             ensure_data_is_dicts(data)
             anonymise_user_names(data, organization=options.get('organization'))
             if format == 'csv':
-                filename = 'report_%s.csv' % report.generate_key(options).replace('?', '_')
+                try:
+                    key = t.get_action('report_key_get')({}, {'id': report_name, 'options': options})
+                except t.NotAuthorized:
+                    t.abort(403)
+                filename = 'report_%s.csv' % key
                 t.response.headers['Content-Type'] = 'application/csv'
                 t.response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
                 return make_csv_from_dicts(data['table'])
@@ -106,7 +118,6 @@ class ReportController(t.BaseController):
 
         are_some_results = bool(data['table'] if 'table' in data
                                 else data)
-        report_template = report.get_template()
         # A couple of context variables for legacy genshi reports
         c.data = data
         c.options = options
@@ -114,7 +125,7 @@ class ReportController(t.BaseController):
             'report': report, 'report_name': report_name, 'data': data,
             'report_date': report_date, 'options': options,
             'options_html': options_html,
-            'report_template': report_template,
+            'report_template': report['template'],
             'are_some_results': are_some_results})
 
 
