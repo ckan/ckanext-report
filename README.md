@@ -48,6 +48,10 @@ Generate all reports:
 
     (pyenv) $ paster --plugin=ckanext-report report generate --config=mysite.ini
 
+Generate a single report:
+
+    (pyenv) $ paster --plugin=ckanext-report report generate <report name> --config=mysite.ini
+
 
 ## Command-line interface
 
