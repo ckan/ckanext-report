@@ -51,7 +51,7 @@
         <p>{{ _('No results found.') }}</p>
       {% else %}
         <div class="pull-left">
-          {% snippet report_template, table=data['table'], data=data, report_name=report_name %}
+          {% snippet report_template, table=data['table'], data=data, report_name=report_name, options=options %}
         </div>
       {% endif %}
   </div>
