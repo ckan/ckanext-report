@@ -103,5 +103,6 @@ class ReportCommand(p.toolkit.CkanCommand):
         from ckanext.report.report_registry import ReportRegistry
         registry = ReportRegistry.instance()
         report = registry.get_report(report_name)
-        all_options = report.add_defaults_to_options(options)
+        all_options = report.add_defaults_to_options(options,
+                                                     report.option_defaults)
         report.refresh_cache(all_options)
