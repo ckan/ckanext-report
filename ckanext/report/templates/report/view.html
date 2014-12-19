@@ -25,8 +25,9 @@
       </div>
       {% endif %}
 
-      <h3>{{ _('Options') }}</h3>
-      <form action="">
+      {% if options %}
+        <h3>{{ _('Options') }}</h3>
+        <form action="">
           {% for key, value in options.items() %}
             {% if key in options_html %}
               {{ options_html[key]|safe }}
@@ -35,17 +36,20 @@
               <input type="hidden" name="{{ key }}" value="{{ value }}"/>
             {% endif %}
           {% endfor %}
-      </form>
+        </form>
+      {% endif %}
 
-      <h3>{{ _('Results') }}</h3>
-      {% if not are_some_results %}
-        <p>{{ _('No results found.') }}</p>
-      {% else %}
+      {% if are_some_results %}
         <div class="pull-right">
             {{ _('Download') }}:
             <a class="btn btn-primary" href="{{ h.report__relative_url_for(format='csv') }}">CSV</a>
             <a class="btn btn-primary" href="{{ h.report__relative_url_for(format='json') }}">JSON</a>
         </div>
+      {% endif %}
+      <h3>{{ _('Results') }}</h3>
+      {% if not are_some_results %}
+        <p>{{ _('No results found.') }}</p>
+      {% else %}
         <div class="pull-left">
           {% snippet report_template, table=data['table'], data=data, report_name=report_name %}
         </div>
