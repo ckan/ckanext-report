@@ -12,7 +12,7 @@ log = logging.getLogger(__name__)
 
 REPORT_KEYS_REQUIRED = set(('name', 'generate', 'template', 'option_defaults',
                             'option_combinations'))
-REPORT_KEYS_OPTIONAL = set(('title', 'description'))
+REPORT_KEYS_OPTIONAL = set(('title', 'description', 'authorize'))
 
 
 class Report(object):
@@ -45,8 +45,6 @@ class Report(object):
                 self.title = re.sub('[_-]', ' ', self.name.capitalize())
             elif key == 'description':
                 self.description = ''
-            else:
-                raise NotImplemented
 
     def generate_key(self, option_dict, defaults_for_missing_keys=True):
         '''Returns a key that will identify the report and options when saved
@@ -121,7 +119,8 @@ class Report(object):
     def get_template(self):
         return self.template
 
-    def add_defaults_to_options(self, options):
+    @staticmethod
+    def add_defaults_to_options(options, defaults):
         '''Returns the options, using option values passed in and falling back
         to the default values for that report.
 
@@ -129,7 +128,7 @@ class Report(object):
         converted to True/False, which suits when the options passed in are URL
         parameters.
         '''
-        defaulted_options = copy.deepcopy(self.option_defaults)
+        defaulted_options = copy.deepcopy(defaults)
         for key in defaulted_options:
             if not key in options:
                 if defaulted_options[key] is True:
@@ -146,6 +145,13 @@ class Report(object):
         for key in set(options) - set(defaulted_options):
             defaulted_options[key] = options[key]
         return defaulted_options
+
+    def as_dict(self):
+        return {'name': self.name,
+                'title': self.title,
+                'description': self.description,
+                'option_defaults': self.option_defaults,
+                'template': self.get_template()}
 
 
 def extract_entity_name(option_dict):
