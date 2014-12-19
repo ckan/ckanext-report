@@ -12,12 +12,16 @@ class ReportCommand(p.toolkit.CkanCommand):
 
     The available commands are:
 
-        initdb - Initialize the database tables for this extension
+        initdb   - Initialize the database tables for this extension
 
-        list - Lists the reports
+        list     - Lists the reports
 
         generate - Generate and cache reports - all of them unless you specify
                    a comma separated list of them.
+
+        generate-for-options - Generate and cache a report for one combination
+                   of option values. You can leave it with the defaults or
+                   specify options as more parameters: key1=value key2=value
 
     e.g.
 
@@ -27,6 +31,9 @@ class ReportCommand(p.toolkit.CkanCommand):
       Generate two reports:
       $ paster report-cache generate openness-scores,broken-links -c development.ini
 
+      Generate report for a particular organization:
+      $ paster report-cache generate-for-options publisher-activity organization=cabinet-office -c development.ini
+
       Generate all reports:
       $ paster report-cache generate -c development.ini
 
@@ -34,8 +41,8 @@ class ReportCommand(p.toolkit.CkanCommand):
 
     summary = __doc__.split('\n')[0]
     usage = __doc__
-    max_args = 2
-    min_args = None
+    max_args = None
+    min_args = 1
 
     def __init__(self, name):
         super(ReportCommand, self).__init__(name)
@@ -46,33 +53,33 @@ class ReportCommand(p.toolkit.CkanCommand):
         self._load_config()
         self.log = logging.getLogger("ckan.lib.cli")
 
-        if not self.args:
-            self.log.error("No arguments supplied and they are required")
-            sys.stderr.write(self.usage)
-            return
-        else:
-            cmd = self.args[0]
-            if cmd == 'initdb':
-                self._initdb()
-            elif cmd == 'list':
-                self._list()
-            elif cmd == 'generate':
-                report_list = None
-                if len(self.args) == 2:
-                    report_list = [s.strip() for s in self.args[1].split(',')]
-                    self.log.info("Running reports => %s", report_list)
-                self._generate(report_list)
+        cmd = self.args[0]
+        if cmd == 'initdb':
+            self._initdb()
+        elif cmd == 'list':
+            self._list()
+        elif cmd == 'generate':
+            report_list = None
+            if len(self.args) == 2:
+                report_list = [s.strip() for s in self.args[1].split(',')]
+                self.log.info("Running reports => %s", report_list)
+            self._generate(report_list)
+        elif cmd == 'generate-for-options':
+            report_name = self.args[1]
+            report_options = {}
+            for option_arg in self.args[2:]:
+                if '=' not in option_arg:
+                    self.parser.error('Option needs an "=" sign in it: "%s"'
+                                      % option_arg)
+                equal_pos = option_arg.find('=')
+                key, value = option_arg[:equal_pos], option_arg[equal_pos+1:]
+                report_options[key] = value
+            self._generate_for_options(report_name, report_options)
 
     def _initdb(self):
-        #import ckan.model as model
-        #model.Session.remove()
-        #model.Session.configure(bind=model.meta.engine)
-        #log.info("Database access initialised")
-
         from ckanext.report import model as report_model
         report_model.init_tables()
         self.log.info('Report table is setup')
-
 
     def _list(self):
         from ckanext.report.report_registry import ReportRegistry
@@ -91,3 +98,10 @@ class ReportCommand(p.toolkit.CkanCommand):
                 registry.get_report(report_name).refresh_cache_for_all_options()
         else:
             registry.refresh_cache_for_all_reports()
+
+    def _generate_for_options(self, report_name, options):
+        from ckanext.report.report_registry import ReportRegistry
+        registry = ReportRegistry.instance()
+        report = registry.get_report(report_name)
+        all_options = report.add_defaults_to_options(options)
+        report.refresh_cache(all_options)
