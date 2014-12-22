@@ -199,4 +199,4 @@ def anonymise_user_names(data, organization=None):
         if col.lower() in ('user', 'username', 'user name', 'author'):
             for row in data['table']:
                 row[col] = dguhelpers.user_link_info(
-                    row[col], organisation=organization)[0]
+                    row[col], organization=organization)[0]
