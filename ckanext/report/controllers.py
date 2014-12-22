@@ -27,6 +27,8 @@ class ReportController(t.BaseController):
             report = t.get_action('report_show')({}, {'id': report_name})
         except t.NotAuthorized:
             t.abort(403)
+        except t.ObjectNotFound:
+            t.abort(404)
 
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \

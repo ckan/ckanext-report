@@ -1,6 +1,7 @@
 from ckanext.report.report_registry import ReportRegistry
-
+import ckan.plugins as p
 import ckan.logic as logic
+
 
 @logic.side_effect_free
 def report_list(context=None, data_dict=None):
@@ -11,10 +12,11 @@ def report_list(context=None, data_dict=None):
     :rtype: list
     """
     logic.check_access('report_list', context, data_dict)
-        
+
     registry = ReportRegistry.instance()
     reports = registry.get_reports()
     return [report.as_dict() for report in reports]
+
 
 @logic.side_effect_free
 def report_show(context=None, data_dict=None):
@@ -34,9 +36,13 @@ def report_show(context=None, data_dict=None):
 
     id = logic.get_or_bust(data_dict, 'id')
 
-    report = ReportRegistry.instance().get_report(id)
+    try:
+        report = ReportRegistry.instance().get_report(id)
+    except KeyError:
+        raise p.toolkit.ObjectNotFound('Report not found: %s' % id)
 
     return report.as_dict()
+
 
 @logic.side_effect_free
 def report_data_get(context=None, data_dict=None):
@@ -66,6 +72,7 @@ def report_data_get(context=None, data_dict=None):
 
     return data, date.isoformat()
 
+
 @logic.side_effect_free
 def report_key_get(context=None, data_dict=None):
     """
@@ -77,7 +84,7 @@ def report_key_get(context=None, data_dict=None):
     :param options: Dictionary of options to pass to the report
     :type options: dict
 
-    :returns: A key to identify the report 
+    :returns: A key to identify the report
     :rtype: string
     """
     logic.check_access('report_key_get', context, data_dict)
