@@ -18,7 +18,7 @@ class ReportController(t.BaseController):
         try:
             reports = t.get_action('report_list')({}, {})
         except t.NotAuthorized:
-            t.abort(403)
+            t.abort(401)
 
         return t.render('report/index.html', extra_vars={'reports': reports})
 
@@ -26,7 +26,7 @@ class ReportController(t.BaseController):
         try:
             report = t.get_action('report_show')({}, {'id': report_name})
         except t.NotAuthorized:
-            t.abort(403)
+            t.abort(401)
         except t.ObjectNotFound:
             t.abort(404)
 
@@ -83,7 +83,7 @@ class ReportController(t.BaseController):
             try:
                t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
             except t.NotAuthorized:
-               t.abort(403)
+               t.abort(401)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 
@@ -97,7 +97,7 @@ class ReportController(t.BaseController):
         except t.ObjectNotFound:
             t.abort(404)
         except t.NotAuthorized:
-            t.abort(403)
+            t.abort(401)
 
         if format and format != 'html':
             ensure_data_is_dicts(data)
@@ -106,7 +106,7 @@ class ReportController(t.BaseController):
                 try:
                     key = t.get_action('report_key_get')({}, {'id': report_name, 'options': options})
                 except t.NotAuthorized:
-                    t.abort(403)
+                    t.abort(401)
                 filename = 'report_%s.csv' % key
                 t.response.headers['Content-Type'] = 'application/csv'
                 t.response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
