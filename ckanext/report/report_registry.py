@@ -153,6 +153,12 @@ class Report(object):
                 'option_defaults': self.option_defaults,
                 'template': self.get_template()}
 
+    def is_visible_to_user(self, user):
+        if hasattr(self, 'authorize'):
+            return self.authorize(user, self.option_defaults)
+        else:
+            return True
+
 
 def extract_entity_name(option_dict):
     '''Hunts for an option key that is the entity name and returns its
