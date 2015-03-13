@@ -7,7 +7,9 @@ from ckanext.report.report_registry import Report
 from ckan.lib.render import TemplateNotFound
 from ckanext.report.json_utils import DateTimeJsonEncoder
 from ckan.common import OrderedDict
-from ckan import model
+
+
+log = __import__('logging').getLogger(__name__)
 
 c = t.c
 
@@ -56,6 +58,10 @@ class ReportController(t.BaseController):
         options_html = {}
         c.options = options  # for legacy genshi snippets
         for option in options:
+            if option not in report['option_defaults']:
+                # e.g. 'refresh' param
+                log.warn('Not displaying report option HTML for param %s as option not recognized')
+                continue
             option_display_params = {'value': options[option],
                                      'default': report['option_defaults'][option]}
             try:
@@ -63,6 +69,7 @@ class ReportController(t.BaseController):
                     t.render_snippet('report/option_%s.html' % option,
                                      data=option_display_params)
             except TemplateNotFound:
+                log.warn('Not displaying report option HTML for param %s as no template found')
                 continue
 
 
