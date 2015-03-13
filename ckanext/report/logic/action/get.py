@@ -15,6 +15,10 @@ def report_list(context=None, data_dict=None):
 
     registry = ReportRegistry.instance()
     reports = registry.get_reports()
+
+    user = context['auth_user_obj']
+    reports = filter(lambda r: r.is_visible_to_user(user), reports)
+
     return [report.as_dict() for report in reports]
 
 
