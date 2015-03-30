@@ -8,6 +8,7 @@ from sqlalchemy import types, Table, Column, Index, MetaData
 from sqlalchemy.orm import mapper
 
 from ckan import model
+from ckan.lib.helpers import OrderedDict
 
 log = logging.getLogger(__name__)
 
@@ -70,12 +71,10 @@ class DataCache(object):
         Retrieves the value and date that it was written if the record with
         object_id/key exists. If not it will return None/None.
         """
-        from ckanext.report.json_utils import DateTimeJsonDecoder
-
         item = model.Session.query(cls)\
-                   .filter(cls.key == key)\
-                   .filter(cls.object_id == object_id)\
-                   .first()
+                    .filter(cls.key == key)\
+                    .filter(cls.object_id == object_id)\
+                    .first()
         if not item:
             #log.debug('Does not exist in cache: %s/%s', object_id, key)
             return (None, None)
@@ -84,12 +83,22 @@ class DataCache(object):
             age = datetime.datetime.now() - item.created
             if age > max_age:
                 log.debug('Cache not returned - it is older than requested %s/%s %r > %r',
-                         object_id, key, age, max_age)
+                          object_id, key, age, max_age)
                 return (None, None)
 
         value = item.value
         if convert_json:
-            value = json.loads(value, cls=DateTimeJsonDecoder)
+            # Use OrderedDict instead of dict, so that the order of the columns
+            # in the data is preserved from the data when it was written (assuming
+            # it was written as an OrderedDict in the report's code).
+            try:
+                # Python 2.7's json library has object_pairs_hook
+                import json
+                value = json.loads(value, object_pairs_hook=OrderedDict)
+            except TypeError: # Untested
+                # Python 2.4-2.6
+                import simplejson as json
+                value = json.loads(value, object_pairs_hook=OrderedDict)
         #log.debug('Cache load: %s/%s "%s"...', object_id, key, repr(value)[:40])
         return value, item.created
 
@@ -105,14 +114,12 @@ class DataCache(object):
         create a new record.  All values will be returned as a string, unless
         convert_json is done to convert from JSON.
         """
-        from ckanext.report.json_utils import DateTimeJsonEncoder
-
         if convert_json:
-            value = json.dumps(value, cls=DateTimeJsonEncoder)
+            value = json.dumps(value)
 
         item = model.Session.query(cls) \
-                   .filter(cls.key == key) \
-                   .filter(cls.object_id == object_id).first()
+                    .filter(cls.key == key) \
+                    .filter(cls.object_id == object_id).first()
         if item is None:
             item = DataCache(object_id=object_id, key=key, value=value)
             model.Session.add(item)

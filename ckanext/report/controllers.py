@@ -5,7 +5,6 @@ import ckan.plugins.toolkit as t
 import ckanext.report.helpers as helpers
 from ckanext.report.report_registry import Report
 from ckan.lib.render import TemplateNotFound
-from ckanext.report.json_utils import DateTimeJsonEncoder
 from ckan.common import OrderedDict
 
 
@@ -121,7 +120,7 @@ class ReportController(t.BaseController):
             elif format == 'json':
                 t.response.headers['Content-Type'] = 'application/json'
                 data['generated_at'] = report_date
-                return json.dumps(data, cls=DateTimeJsonEncoder)
+                return json.dumps(data)
             else:
                 t.abort(400, 'Format not known - try html, json or csv')
 

@@ -26,16 +26,16 @@ class ReportCommand(p.toolkit.CkanCommand):
     e.g.
 
       List all reports:
-      $ paster report-cache list -c development.ini
+      $ paster report list
 
       Generate two reports:
-      $ paster report-cache generate openness-scores,broken-links -c development.ini
+      $ paster report generate openness-scores,broken-links
 
-      Generate report for a particular organization:
-      $ paster report-cache generate-for-options publisher-activity organization=cabinet-office -c development.ini
+      Generate report for one specified option value(s):
+      $ paster report generate-for-options publisher-activity organization=cabinet-office
 
       Generate all reports:
-      $ paster report-cache generate -c development.ini
+      $ paster report generate
 
     """
 
