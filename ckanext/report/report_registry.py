@@ -139,7 +139,10 @@ class Report(object):
                 continue
             value = options[key]
             if isinstance(defaulted_options[key], bool):
-                defaulted_options[key] = asbool(value)
+                try:
+                    defaulted_options[key] = asbool(value)
+                except ValueError:
+                    pass  # leave it as default
             else:
                 defaulted_options[key] = value
         for key in set(options) - set(defaulted_options):
