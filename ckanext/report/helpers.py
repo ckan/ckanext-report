@@ -1,21 +1,28 @@
 from ckanext.report.report_registry import ReportRegistry
-import ckan.plugins as p
+from ckan.plugins import toolkit as tk
 import ckan.lib.helpers
 from ckan import model
 
 
 def relative_url_for(**kwargs):
-    '''Returns the existing URL but amended for the given url_for-style
-    parameters. Much easier than calling h.add_url_param etc.
+    '''Return the existing URL but amended for the given url_for-style
+    parameters. Much easier than calling h.add_url_param etc. For switching to
+    URLs inside the current controller action only.
     '''
-    args = dict(p.toolkit.request.environ['pylons.routes_dict'].items()
-                + p.toolkit.request.params.items()
+    # Restrict the request params to the same action & controller, to avoid
+    # being an open redirect.
+    disallowed_params = set(('controller', 'action', 'anchor', 'host',
+                             'protocol', 'qualified'))
+    user_specified_params = [(k, v) for k, v in tk.request.params.items()
+                             if k not in disallowed_params]
+    args = dict(tk.request.environ['pylons.routes_dict'].items()
+                + user_specified_params
                 + kwargs.items())
     # remove blanks
     for k, v in args.items():
         if not v:
             del args[k]
-    return p.toolkit.url_for(**args)
+    return tk.url_for(**args)
 
 
 def chunks(list_, size):

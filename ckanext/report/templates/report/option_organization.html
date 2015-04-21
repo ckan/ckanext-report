@@ -9,7 +9,7 @@ default - Default value for this option
     <label for="option-organization"> {{ _('Publisher:') }} </label>
     {% set offer_organization_index = default == None %}
     {% if offer_organization_index and value != None %}
-        <a href="{{ h.relative_url_for(organization=None) }}">Index of all publishers</a>
+        <a href="{{ h.report__relative_url_for(organization=None) }}">Index of all publishers</a>
     {% endif %}
     <select id="option-organization" name="organization" class="inline js-auto-submit">
         {% if offer_organization_index %}
