@@ -170,6 +170,32 @@ The convention is to put the report templates in: `ckanext/<extension>/templates
 
 Note: currently ckanext-report has not been styled yet for the core CKAN templates, due to the author using custom templates. Feel free to add styling.
 
+## Option templates
+
+Each option needs a template snippet containing the widget for the user to change the value. The snippet for selecting the 'organization' is already included, and you can define others.
+
+* It must be located at: `report/option_<option-name>.html`
+* It is passed values:
+  * value - Value of this option
+  * default - Default value for this option
+* The widget should be a <form> field, with name: `option-<option-name>` that returns the value for the option when the form is submitted.
+* If it is not missing then the report page falls back to just showing the option value (i.e. read-only).
+
+Here's an example of a checkbox for whether to 'include sub-organizations' from 'ckanext/report/templates/report/option_include_sub_organizations.html':
+```
+{#
+Option snippet - organization
+
+value - Value of this option
+#}
+<span class="form-select control-group control-organization">
+    <label class="checkbox">
+      <input type="checkbox" name="include_sub_organizations" value="1" class="inline js-auto-submit" {{ 'checked=checked' if value }} />
+      Include results from sub-organizations
+    </label>
+</span>
+```
+
 ## Registration
 
 Register your report with ckanext-report with the IReport plugin and supply its configuration.
