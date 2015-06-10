@@ -75,6 +75,8 @@ class ReportCommand(p.toolkit.CkanCommand):
                 key, value = option_arg[:equal_pos], option_arg[equal_pos+1:]
                 report_options[key] = value
             self._generate_for_options(report_name, report_options)
+        else:
+            self.parser.error('Command not recognized: %r' % cmd)
 
     def _initdb(self):
         from ckanext.report import model as report_model

@@ -87,7 +87,7 @@ class Report(object):
         Returns (data, date)
         '''
         from ckanext.report import model as report_model
-        log.info('  options: %r', option_dict)
+        log.info('  Gen for options: %r', option_dict)
         data = self.generate(**option_dict)
         # option_combinations should specify every key, so mustn't allow
         # default values
