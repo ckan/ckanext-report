@@ -7,7 +7,9 @@
   {{ h.build_nav('report-org' if '/organization' in request.environ.get('PATH_INFO', '') else 'report', report.title, report_name=report_name) }}
 {% endblock%}
 
-{% block primary_content_inner %}
+{% block primary %}
+  <article class="module">
+    <div class="module-content">
       <h1>{{ report.title }}</h1>
       <p>{{ report.description }}</p>
       <p>
@@ -55,26 +57,16 @@
           {% snippet report_template, table=data['table'], data=data, report_name=report_name, options=options %}
         </div>
       {% endif %}
-  </div>
+    </div>
+  </article>
 {% endblock%}
+
+{% block secondary %}{% endblock %}
 
 {% block scripts %}
     {{ super() }}
     <!--! Tablesorter allows table sorting by clicking on each column -->
-    <script type="text/javascript" src="/scripts/vendor/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript">
-      //<![CDATA[
-      $(document).ready(function()
-        {
-          $("#report-table").tablesorter({
-              dateFormat: "uk",
-          });
-          $(".js-auto-submit").change(function () {
-              $(this).closest("form").submit();
-          });
-        }
-      );
-    // ]]>
-    </script>
+    {% resource 'ckanext-report/jquery.tablesorter.js' %}
+    {% resource 'ckanext-report/tablesort.js' %}
 {% endblock%}
 
