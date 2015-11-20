@@ -1,0 +1,11 @@
+{% ckan_extends %}
+
+{% block header_site_navigation_tabs %}
+  {{ h.build_nav_main(
+    ('search', _('Datasets')),
+    ('organizations_index', _('Organizations')),
+    ('group_index', _('Groups')),
+    ('reports', _('Reports')),
+    ('about', _('About'))
+  ) }}
+{% endblock %}

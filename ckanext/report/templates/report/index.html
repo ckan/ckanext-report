@@ -6,29 +6,37 @@
   {{ h.build_nav('reports', _('Reports')) }}
 {% endblock %}
 
+{% block page_header %}{% endblock %}
+
 {% block primary_content_inner %}
   <div class="dataset">
-    <div class="row">
+    <ul class="media-grid masonry" data-module="media-grid" style="position: relative; height: 430px;">
       {% for report in reports %}
-        {% if loop.index0%4==0 %}<div class="clearfix visible-lg"></div>{% endif %}
-        {% if loop.index0%3==0 %}<div class="clearfix visible-md clearfix-ie7"></div>{% endif %}
-        {% if loop.index0%2==0 %}<div class="clearfix visible-sm"></div>{% endif %}
-        <div class="col-lg-3 col-md-4 col-sm-6">
+        <li class="media-item masonry-brick" style="position: absolute; top: 0px; left: 0px;">
           {% set report_url=h.url_for('report', report_name=report.name, **h.report__explicit_default_options(report.name)) %}
-          <div class="report-summary">
-            <a href="{{ report_url }}" class="report-header">
-              <div class="report-title">{{ report.title }}</div>
-            </a>
-            <div class="report-body">
-              <div class="report-description">{{ report.description }}</div>
-              <div class="clearfix clearfix-ie7"> &nbsp;</div>
-              <a class="view-report-link" href="{{ report_url }}">
-                {{ _('View Report') }}
-              </a>
-            </div>
-          </div>
-        </div>
+          <img src="/ckanext-report/placeholder-report.png" alt="{{ report.name }}" class="media-image">
+          <h3 class="media-heading">{{ report.title }}</h3>
+          {{ report.description }}
+          <a href="{{ report_url }}" title="View {{ report.title }}" class="media-view">
+            <span>View {{report.title}}</span>
+          </a>
+        </li>
       {% endfor %}
-    </div>
+    </ul>
   </div>
-{% endblock%}
+{% endblock %}
+
+{% block secondary_content %}
+    <div class="module module-narrow module-shallow">
+      <h2 class="module-heading">
+        {{ _('Reports') }}
+      </h2>
+      <div class="module-content">
+        <p>
+          {% trans %}
+          Reports provide deeper insight into the datasets on this site. They take a while to generate, so are generally refreshed nightly.
+          {% endtrans %}
+        </p>
+      </div>
+    </div>
+{% endblock %}
