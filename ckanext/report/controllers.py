@@ -95,7 +95,8 @@ class ReportController(t.BaseController):
 
         # Check for any options not allowed by the report
         for key in options:
-            if key not in report['option_defaults']:
+            if key not in report['option_defaults'] and \
+                key not in ['page', 'limit']:
                 t.abort(400, 'Option not allowed by report: %s' % key)
 
         try:
@@ -110,7 +111,10 @@ class ReportController(t.BaseController):
             anonymise_user_names(data, organization=options.get('organization'))
             if format == 'csv':
                 try:
-                    key = t.get_action('report_key_get')({}, {'id': report_name, 'options': options})
+                    key = t.get_action('report_key_get')(
+                        {},
+                        {'id': report_name, 'options': options}
+                    )
                 except t.NotAuthorized:
                     t.abort(401)
                 filename = 'report_%s.csv' % key
