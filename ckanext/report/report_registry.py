@@ -116,19 +116,6 @@ class Report(object):
         if data is None:
             data, date = self.refresh_cache(option_dict)
 
-        """
-        # Pagination
-        page = option_dict.get('page', None)
-        limit = option_dict.get('limit', None)
-        if (page and limit):
-            page = int(page)
-            limit = int(limit)
-            min_val = (page * limit) - limit
-            max_val = (page * limit)
-
-            data['table'] = data['table'][min_val:max_val]
-        """
-
         return data, date
 
     def get_cached_date(self, **option_dict):
