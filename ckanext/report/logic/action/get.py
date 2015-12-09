@@ -2,8 +2,6 @@ from ckanext.report.report_registry import ReportRegistry
 import ckan.plugins as p
 import ckan.logic as logic
 
-import pdb
-
 
 @logic.side_effect_free
 def report_list(context=None, data_dict=None):

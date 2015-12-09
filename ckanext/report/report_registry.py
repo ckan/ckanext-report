@@ -8,13 +8,12 @@ from ckan import model
 from ckan.common import OrderedDict
 from ckanext.report.interfaces import IReport
 
-import pdb
-
 log = logging.getLogger(__name__)
 
 REPORT_KEYS_REQUIRED = set(('name', 'generate', 'template', 'option_defaults',
                             'option_combinations'))
-REPORT_KEYS_OPTIONAL = set(('title', 'description', 'authorize'))
+REPORT_KEYS_OPTIONAL = set(('title', 'description', 'authorize',
+                            'paginate_by'))
 
 
 class Report(object):
@@ -49,6 +48,9 @@ class Report(object):
                 self.title = re.sub('[_-]', ' ', self.name.capitalize())
             elif key == 'description':
                 self.description = ''
+
+        # Save the paginate_by setting
+        self.paginate_by = report_info_dict.get('paginate_by')
 
     def generate_key(self, option_dict, defaults_for_missing_keys=True):
         '''Returns a key that will identify the report and options when saved
@@ -176,7 +178,8 @@ class Report(object):
                 'title': self.title,
                 'description': self.description,
                 'option_defaults': self.option_defaults,
-                'template': self.get_template()}
+                'template': self.get_template(),
+                'paginate_by': self.paginate_by}
 
     def is_visible_to_user(self, user):
         if hasattr(self, 'authorize'):
@@ -210,6 +213,7 @@ class ReportRegistry(object):
 
     def __init__(self):
         # register all the reports
+
         import ckan.plugins as p
         self._reports = {}  # this reset is needed for 'paster serve --restart'
         for plugin in p.PluginImplementations(IReport):
