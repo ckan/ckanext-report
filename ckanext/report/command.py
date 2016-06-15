@@ -95,13 +95,22 @@ class ReportCommand(p.toolkit.CkanCommand):
                   date.strftime('%d/%m/%Y %H:%M') if date else '(not cached)')
 
     def _generate(self, report_list=None):
+        import time
         from ckanext.report.report_registry import ReportRegistry
+        timings = {}
+
         registry = ReportRegistry.instance()
         if report_list:
             for report_name in report_list:
+                s = time.time()
                 registry.get_report(report_name).refresh_cache_for_all_options()
+                timings[report_name] = time.time() - s
         else:
+            s = time.time()
             registry.refresh_cache_for_all_reports()
+            timings["All Reports"] = time.time() - s
+
+        self.log.info("Report generation complete %s", timings)
 
     def _generate_for_options(self, report_name, options):
         from ckanext.report.report_registry import ReportRegistry
