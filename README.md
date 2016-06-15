@@ -40,18 +40,6 @@ Enable the plugin. In your config (e.g. development.ini or production.ini) add `
 
     ckan.plugins = report
 
-Get the list of reports:
-
-    (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
-
-Generate all reports:
-
-    (pyenv) $ paster --plugin=ckanext-report report generate --config=mysite.ini
-
-Generate a single report:
-
-    (pyenv) $ paster --plugin=ckanext-report report generate <report name> --config=mysite.ini
-
 
 ## Command-line interface
 
@@ -65,9 +53,17 @@ The following operations can be run from the command line using the ``paster --p
     - generate the specified reports, or all of them if none specified
 ```
 
-e.g.:
+Get the list of reports:
 
     (pyenv) $ paster --plugin=ckanext-report report list --config=mysite.ini
+
+Generate all reports:
+
+    (pyenv) $ paster --plugin=ckanext-report report generate --config=mysite.ini
+
+Generate a single report:
+
+    (pyenv) $ paster --plugin=ckanext-report report generate <report name> --config=mysite.ini
 
 
 ## Demo report - Tagless Datasets

@@ -73,6 +73,8 @@ class ReportCommand(p.toolkit.CkanCommand):
                                       % option_arg)
                 equal_pos = option_arg.find('=')
                 key, value = option_arg[:equal_pos], option_arg[equal_pos+1:]
+                if value == '':
+                    value = None  # this is what the web i/f does with params
                 report_options[key] = value
             self._generate_for_options(report_name, report_options)
         else:
