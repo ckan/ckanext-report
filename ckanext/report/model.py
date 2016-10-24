@@ -104,7 +104,7 @@ class DataCache(object):
 
     @classmethod
     def get_if_fresh(cls, *args, **kwargs):
-        return cls.get(*args, max_age=datetime.timedelta(days=1), **kwargs)
+        return cls.get(*args, max_age=datetime.timedelta(days=2), **kwargs)
 
     @classmethod
     def set(cls, object_id, key, value, convert_json=False):
