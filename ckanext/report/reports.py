@@ -3,7 +3,7 @@ Working examples - simple tag report.
 '''
 
 from ckan import model
-from ckan.lib.helpers import OrderedDict
+from ckan.common import OrderedDict
 from ckanext.report import lib
 
 

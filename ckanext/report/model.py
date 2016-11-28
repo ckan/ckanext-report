@@ -8,7 +8,7 @@ from sqlalchemy import types, Table, Column, Index, MetaData
 from sqlalchemy.orm import mapper
 
 from ckan import model
-from ckan.lib.helpers import OrderedDict
+from ckan.common import OrderedDict
 
 log = logging.getLogger(__name__)
 
