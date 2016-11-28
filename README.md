@@ -215,7 +215,7 @@ class TaglessReportPlugin(p.SingletonPlugin):
 The last line refers to `tag_report_info` which is a dictionary with properties of the report. This is stored in `reports.py` together with the report code (see above). The info dict looks like this:
 
 ```python
-from ckan.lib.helpers import OrderedDict
+from ckan.common import OrderedDict
 tagless_report_info = {
     'name': 'tagless-datasets',
     'description': 'Datasets which have no tags.',
