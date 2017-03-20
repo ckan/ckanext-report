@@ -1,0 +1,103 @@
+# #-#-#-#-#  ckanext-report.pot (ckanext-report 0.1)  #-#-#-#-#
+# Translations template for ckanext-report.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the ckanext-report project.
+#
+msgid ""
+msgstr ""
+"#-#-#-#-#  ckanext-report.pot (ckanext-report 0.1)  #-#-#-#-#\n"
+"Project-Id-Version: ckanext-report 0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2017-03-20 17:01+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ckanext/report/templates/report/index.html:3
+#: ckanext/report/templates/report/index.html:6
+#: ckanext/report/templates/report/view.html:3
+#: ckanext/report/templates/report/view.html:6
+msgid "Reports"
+msgstr ""
+
+#: ckanext/report/templates/report/index.html:26
+msgid "View Report"
+msgstr ""
+
+#: ckanext/report/templates/report/option_include_sub_organizations.html:9
+msgid "Include results from sub-organizations"
+msgstr ""
+
+#: ckanext/report/templates/report/option_organization.html:12
+#: ckanext/report/templates/report/option_organization.html:16
+msgid "Index of all organizations"
+msgstr ""
+
+#: ckanext/report/templates/report/tagless-datasets.html:8
+msgid "Datasets without tags"
+msgstr ""
+
+#: ckanext/report/templates/report/tagless-datasets.html:9
+msgid "Average tags per package"
+msgstr ""
+
+#: ckanext/report/templates/report/tagless-datasets.html:16
+msgid "Notes"
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:14
+msgid "Generated"
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:23
+msgid ""
+"As a system administrator you are able to refresh this report on demand by "
+"clicking the 'Refresh' button."
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:29
+msgid "Options"
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:50
+msgid "Results"
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:52
+msgid "No results found."
+msgstr ""
+
+#: ckan/logic/converters.py:119 ckan/logic/validators.py:206
+#: ckan/logic/validators.py:223 ckan/logic/validators.py:719
+#: ckan/templates/group/members.html:17
+#: ckan/templates/organization/members.html:17
+#: ckanext/stats/templates/ckanext/stats/index.html:156
+msgid "User"
+msgstr ""
+
+#: ckan/logic/converters.py:144 ckan/logic/validators.py:141
+#: ckan/logic/validators.py:183 ckan/templates/package/read_base.html:24
+#: ckanext/stats/templates/ckanext/stats/index.html:89
+#: ckanext/stats/templates_legacy/ckanext/stats/index.html:65
+#: ckanext/stats/templates_legacy/ckanext/stats/index.html:74
+msgid "Dataset"
+msgstr ""
+
+#: ckan/templates/package/resource_read.html:43
+#: ckan/templates/package/snippets/resource_item.html:45
+msgid "Download"
+msgstr ""
+
+#: ckan/templates/package/resource_read.html:161
+#: ckan/templates/package/snippets/additional_info.html:68
+msgid "Created"
+msgstr ""
+
+#: ckan/templates/package/snippets/package_basic_fields.html:69
+#: ckan/templates/snippets/organization.html:23
+msgid "Organization"
+msgstr ""
