@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: krzysztof.madejski@epf.org.pl\n"
-"POT-Creation-Date: 2017-03-20 17:02+0100\n"
+"POT-Creation-Date: 2017-03-21 14:40+0100\n"
 "PO-Revision-Date: 2017-03-20 17:02+0100\n"
 "Last-Translator: Krzysztof Madejski <krzysztof.madejski@epf.org.pl>\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && "
@@ -54,13 +54,21 @@ msgstr "Notatki"
 msgid "Generated"
 msgstr "Wygenerowany"
 
+#: ckanext/report/templates/report/view.html:18
+msgid "Refresh report"
+msgstr "Odśwież raport"
+
+#: ckanext/report/templates/report/view.html:21
+msgid "Refresh"
+msgstr "Odśwież"
+
 #: ckanext/report/templates/report/view.html:23
 msgid ""
 "As a system administrator you are able to refresh this report on demand "
 "by clicking the 'Refresh' button."
 msgstr ""
-"Jako administrator możesz odświeżyć ten raport na żądanie "
-"poprzez kliknięcie przycisku odśwież 'Refresh'."
+"Jako administrator możesz odświeżyć ten raport na żądanie poprzez "
+"kliknięcie przycisku 'Odśwież'."
 
 #: ckanext/report/templates/report/view.html:29
 msgid "Options"

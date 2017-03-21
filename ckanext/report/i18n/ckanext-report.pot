@@ -53,6 +53,14 @@ msgstr ""
 msgid "Generated"
 msgstr ""
 
+#: ckanext/report/templates/report/view.html:18
+msgid "Refresh report"
+msgstr ""
+
+#: ckanext/report/templates/report/view.html:21
+msgid "Refresh"
+msgstr ""
+
 #: ckanext/report/templates/report/view.html:23
 msgid ""
 "As a system administrator you are able to refresh this report on demand by "
@@ -69,35 +77,4 @@ msgstr ""
 
 #: ckanext/report/templates/report/view.html:52
 msgid "No results found."
-msgstr ""
-
-#: ckan/logic/converters.py:119 ckan/logic/validators.py:206
-#: ckan/logic/validators.py:223 ckan/logic/validators.py:719
-#: ckan/templates/group/members.html:17
-#: ckan/templates/organization/members.html:17
-#: ckanext/stats/templates/ckanext/stats/index.html:156
-msgid "User"
-msgstr ""
-
-#: ckan/logic/converters.py:144 ckan/logic/validators.py:141
-#: ckan/logic/validators.py:183 ckan/templates/package/read_base.html:24
-#: ckanext/stats/templates/ckanext/stats/index.html:89
-#: ckanext/stats/templates_legacy/ckanext/stats/index.html:65
-#: ckanext/stats/templates_legacy/ckanext/stats/index.html:74
-msgid "Dataset"
-msgstr ""
-
-#: ckan/templates/package/resource_read.html:43
-#: ckan/templates/package/snippets/resource_item.html:45
-msgid "Download"
-msgstr ""
-
-#: ckan/templates/package/resource_read.html:161
-#: ckan/templates/package/snippets/additional_info.html:68
-msgid "Created"
-msgstr ""
-
-#: ckan/templates/package/snippets/package_basic_fields.html:69
-#: ckan/templates/snippets/organization.html:23
-msgid "Organization"
 msgstr ""
