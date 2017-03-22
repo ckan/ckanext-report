@@ -10,6 +10,7 @@ from sqlalchemy.orm import mapper
 from ckan import model
 from ckan.common import OrderedDict
 
+
 log = logging.getLogger(__name__)
 
 __all__ = ['DataCache', 'data_cache_table', 'init_tables']
@@ -39,7 +40,7 @@ class DataCache(object):
     This model makes no assumptions on what is stored, and so it is up to the
     producer and consumer to agree on a format for the value stored.  It is
     suggested that for data that is not a basic type (int, string etc) that
-    json is used as decoding of JSON will still be a lot faster than performing
+    JSON is used as decoding of JSON will still be a lot faster than performing
     the initial queries.
 
     Example usage:
@@ -71,35 +72,35 @@ class DataCache(object):
         Retrieves the value and date that it was written if the record with
         object_id/key exists. If not it will return None/None.
         """
+
         item = model.Session.query(cls)\
                     .filter(cls.key == key)\
                     .filter(cls.object_id == object_id)\
                     .first()
         if not item:
-            #log.debug('Does not exist in cache: %s/%s', object_id, key)
             return (None, None)
 
         if max_age:
             age = datetime.datetime.now() - item.created
             if age > max_age:
-                log.debug('Cache not returned - it is older than requested %s/%s %r > %r',
+                log.debug('Cache not returned - it is older than requested '
+                          '%s/%s %r > %r',
                           object_id, key, age, max_age)
                 return (None, None)
 
         value = item.value
         if convert_json:
             # Use OrderedDict instead of dict, so that the order of the columns
-            # in the data is preserved from the data when it was written (assuming
-            # it was written as an OrderedDict in the report's code).
+            # in the data is preserved from the data when it was written
+            # (assuming it was written as an OrderedDict in the report's code).
             try:
                 # Python 2.7's json library has object_pairs_hook
                 import json
                 value = json.loads(value, object_pairs_hook=OrderedDict)
-            except TypeError: # Untested
+            except TypeError:  # Untested
                 # Python 2.4-2.6
                 import simplejson as json
                 value = json.loads(value, object_pairs_hook=OrderedDict)
-        #log.debug('Cache load: %s/%s "%s"...', object_id, key, repr(value)[:40])
         return value, item.created
 
     @classmethod
@@ -132,6 +133,7 @@ class DataCache(object):
         return item.created
 
 mapper(DataCache, data_cache_table)
+
 
 def init_tables():
     metadata.create_all(model.meta.engine)

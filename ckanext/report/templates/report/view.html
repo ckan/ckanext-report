@@ -52,7 +52,8 @@
         <p>{{ _('No results found.') }}</p>
       {% else %}
         <div class="pull-left">
-          {% snippet report_template, table=data['table'], data=data, report_name=report_name, options=options %}
+          {% snippet report_template, table=data['table'], data=data, report_name=report_name, options=options, pagination=pagination %}
+          {% snippet 'report/snippets/pagination.html', pagination=pagination %}
         </div>
       {% endif %}
   </div>
@@ -77,4 +78,3 @@
     // ]]>
     </script>
 {% endblock%}
-

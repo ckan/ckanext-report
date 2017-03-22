@@ -13,8 +13,8 @@ def tagless_report(organization, include_sub_organizations=False):
     Returns something like this:
         {
          'table': [
-            {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested', 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},
-            {'name': 'co2-monthly', 'title' 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},
+            {'name': 'river-levels', 'title': 'River levels', 'notes': 'Harvested', 'user': 'bob', 'created': '2008-06-13T10:24:59.435631'},  # noqa
+            {'name': 'co2-monthly', 'title' 'CO2 monthly', 'notes': '', 'user': 'bob', 'created': '2009-12-14T08:42:45.473827'},  # noqa
             ],
          'num_packages': 56,
          'packages_without_tags_percent': 4,
@@ -46,14 +46,16 @@ def tagless_report(organization, include_sub_organizations=False):
         average_tags_per_package = round(float(num_taggings) / num_packages, 1)
     else:
         average_tags_per_package = None
-    packages_without_tags_percent = lib.percent(len(tagless_pkgs), num_packages)
+    packages_without_tags_percent = lib.percent(
+        len(tagless_pkgs), num_packages)
 
     return {
         'table': tagless_pkgs,
         'num_packages': num_packages,
         'packages_without_tags_percent': packages_without_tags_percent,
         'average_tags_per_package': average_tags_per_package,
-        }
+    }
+
 
 def tagless_report_option_combinations():
     for organization in lib.all_organizations(include_none=True):
@@ -70,4 +72,5 @@ tagless_report_info = {
     'option_combinations': tagless_report_option_combinations,
     'generate': tagless_report,
     'template': 'report/tagless-datasets.html',
+    'paginate_by': 20
     }

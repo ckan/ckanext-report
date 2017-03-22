@@ -65,12 +65,13 @@ def report_data_get(context=None, data_dict=None):
     :returns: A list containing the data and the date on which it was created
     :rtype: list
     """
+
     logic.check_access('report_data_get', context, data_dict)
 
-    id = logic.get_or_bust(data_dict, 'id')
+    report_id = logic.get_or_bust(data_dict, 'id')
     options = data_dict.get('options', {})
 
-    report = ReportRegistry.instance().get_report(id)
+    report = ReportRegistry.instance().get_report(report_id)
 
     data, date = report.get_fresh_report(**options)
 
