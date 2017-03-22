@@ -6,14 +6,14 @@ default - Default value for this option
 #}
 
 <span class="form-select control-group control-organization">
-    <label for="option-organization"> {{ _('Publisher:') }} </label>
+    <label for="option-organization"> {{ _('Organization') }}: </label>
     {% set offer_organization_index = (default == None) %}
     {% if offer_organization_index and value != None %}
-        <a href="{{ h.report__relative_url_for(organization=None) }}">Index of all publishers</a>
+        <a href="{{ h.report__relative_url_for(organization=None) }}">{% trans %}Index of all organizations{% endtrans %}</a>
     {% endif %}
     <select id="option-organization" name="organization" class="inline js-auto-submit">
         {% if offer_organization_index %}
-          <option value="" {% if value == None %}selected="selected"{% endif %}>-- {{ _('Index of all publishers') }} --</option>
+          <option value="" {% if value == None %}selected="selected"{% endif %}>-- {{ _('Index of all organizations') }} --</option>
         {% endif %}
         {% for org_name, org_title in h.report__organization_list() %}
             <option value="{{org_name}}" {% if value == org_name %}selected="selected" {% endif %}> {{org_title}} </option>

@@ -1,0 +1,84 @@
+# Polish translations for ckanext-report.
+# Copyright (C) 2017 ORGANIZATION
+# This file is distributed under the same license as the ckanext-report
+# project.
+# Krzysztof Madejski <krzysztof.madejski@epf.org.pl>, 2017.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: krzysztof.madejski@epf.org.pl\n"
+"POT-Creation-Date: 2017-03-21 14:40+0100\n"
+"PO-Revision-Date: 2017-03-20 17:02+0100\n"
+"Last-Translator: Krzysztof Madejski <krzysztof.madejski@epf.org.pl>\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && "
+"(n%100<10 || n%100>=20) ? 1 : 2)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 0.9.6\n"
+
+#: ckanext/report/templates/report/index.html:3
+#: ckanext/report/templates/report/index.html:6
+#: ckanext/report/templates/report/view.html:3
+#: ckanext/report/templates/report/view.html:6
+msgid "Reports"
+msgstr "Raporty"
+
+#: ckanext/report/templates/report/index.html:26
+msgid "View Report"
+msgstr "Zobacz Raport"
+
+#: ckanext/report/templates/report/option_include_sub_organizations.html:9
+msgid "Include results from sub-organizations"
+msgstr "Dołącz wyniki od sub-organizacji"
+
+#: ckanext/report/templates/report/option_organization.html:12
+#: ckanext/report/templates/report/option_organization.html:16
+msgid "Index of all organizations"
+msgstr "Wszystkie organizacje"
+
+#: ckanext/report/templates/report/tagless-datasets.html:8
+msgid "Datasets without tags"
+msgstr "Zbiory bez słów kluczowych"
+
+#: ckanext/report/templates/report/tagless-datasets.html:9
+msgid "Average tags per package"
+msgstr "Średnia ilość słów kluczowych na zbiór"
+
+#: ckanext/report/templates/report/tagless-datasets.html:16
+msgid "Notes"
+msgstr "Notatki"
+
+#: ckanext/report/templates/report/view.html:14
+msgid "Generated"
+msgstr "Wygenerowany"
+
+#: ckanext/report/templates/report/view.html:18
+msgid "Refresh report"
+msgstr "Odśwież raport"
+
+#: ckanext/report/templates/report/view.html:21
+msgid "Refresh"
+msgstr "Odśwież"
+
+#: ckanext/report/templates/report/view.html:23
+msgid ""
+"As a system administrator you are able to refresh this report on demand "
+"by clicking the 'Refresh' button."
+msgstr ""
+"Jako administrator możesz odświeżyć ten raport na żądanie poprzez "
+"kliknięcie przycisku 'Odśwież'."
+
+#: ckanext/report/templates/report/view.html:29
+msgid "Options"
+msgstr "Opcje"
+
+#: ckanext/report/templates/report/view.html:50
+msgid "Results"
+msgstr "Wyniki"
+
+#: ckanext/report/templates/report/view.html:52
+msgid "No results found."
+msgstr "Nie znaleziono wyników"
+

@@ -247,3 +247,13 @@ def tagless_report_option_combinations():
             yield {'organization': organization,
                    'include_sub_organizations': include_sub_organizations}
 ```
+
+## Translations
+
+To translate plugin to a new language (ie. "pl") run `python setup.py init_catalog -l pl`.
+
+To update template file with new translation added in the code or templates
+run `python setup.py extract_messages` in the root plugin directory. Then run
+`./ckanext/report/i18n/unique_pot.sh -v` to strip core ckan's translations.
+
+To update translation files for locale "pl" with new template run `python setup.py update_catalog -l pl`.
