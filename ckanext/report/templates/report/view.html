@@ -7,6 +7,16 @@
   {{ h.build_nav('report-org' if '/organization' in request.environ.get('PATH_INFO', '') else 'report', report.title, report_name=report_name) }}
 {% endblock%}
 
+{% block secondary %}
+{% endblock%}
+{% block primary %}
+    <div class="">
+    {% block primary_content %}
+        {{super()}}
+    {% endblock %}
+    </div>
+{% endblock %}
+
 {% block primary_content_inner %}
       <h1>{{ report.title }}</h1>
       <p>{{ report.description }}</p>
@@ -14,7 +24,7 @@
           {{ _('Generated') }}: {{ h.report__render_datetime(report_date, '%d/%m/%Y %H:%M') }}
       </p>
       {% if c.userobj.sysadmin %}
-      <div class="panel panel-info" style="width=700px">
+      <div class="panel panel-info" style="">
           <div class="panel-heading"><strong>{% trans %}Refresh report{% endtrans %}</strong></div>
           <div class="panel-body">
             <form action="" method="POST">
@@ -77,4 +87,3 @@
     // ]]>
     </script>
 {% endblock%}
-
