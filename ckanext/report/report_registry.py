@@ -5,7 +5,7 @@ import re
 from paste.deploy.converters import asbool
 
 from ckan import model
-from ckan.common import OrderedDict
+from collections import OrderedDict
 from ckanext.report.interfaces import IReport
 
 log = logging.getLogger(__name__)
