@@ -2,7 +2,7 @@ import logging
 import copy
 import re
 
-from paste.deploy.converters import asbool
+from ckan.plugins.toolkit import asbool
 
 from ckan import model
 from collections import OrderedDict
