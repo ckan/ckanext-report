@@ -21,14 +21,14 @@ TODO:
 
 Compatibility: Requires CKAN version 2.1 or later (but can be easily adapted for older versions).
 
-=============== =============
-CKAN version    Compatibility
-=============== =============
-2.6 and earlier yes
-2.7             yes
-2.8             yes
-2.9             no - needs updating
-=============== =============
+
+| CKAN version    | Compatibility       |
+| --------------- | ------------------- |
+| 2.6 and earlier | yes                 |
+| 2.7             | yes                 |
+| 2.8             | yes                 |
+| 2.9             | no - needs updating |
+
 
 Status: in production at data.gov.uk but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/yaditi/ckanext-report/tree/geoversion
 
