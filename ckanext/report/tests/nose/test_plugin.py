@@ -3,7 +3,7 @@ import ckan.tests.helpers as helpers
 
 class TestReportPlugin(helpers.FunctionalTestBase):
     @classmethod
-    def setup_class(self):
+    def setup_class(cls):
         super(TestReportPlugin, cls).setup_class()
         if not plugins.plugin_loaded(u'report'):
             plugins.load(u'report')
