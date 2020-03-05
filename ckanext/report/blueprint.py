@@ -140,3 +140,6 @@ def view(self, report_name, organization=None, refresh=False):
 report.add_url_rule(u'/report', view_func=index)
 report.add_url_rule(u'/report/<report_name>', view_func=view)
 report.add_url_rule(u'/report/<report_name>/<organization>', view_func=view)
+
+def get_blueprints():
+    return [report]
