@@ -6,7 +6,7 @@ import ckan.lib.helpers as helpers
 from ckan.lib.render import TemplateNotFound
 
 from ckanext.report.report_registry import Report
-from ckanext.report.controllers import make_csv_from_dicts, ensure_data_is_dicts, anonymise_user_names
+from ckanext.report.lib import make_csv_from_dicts, ensure_data_is_dicts, anonymise_user_names
 
 import logging
 log = logging.getLogger(__name__)
