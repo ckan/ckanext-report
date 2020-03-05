@@ -18,4 +18,4 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         res = app.get(u'/report')
 
-        assert u"Reports" in res.body
+        assert "Reports" in res.body
