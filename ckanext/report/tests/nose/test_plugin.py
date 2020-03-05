@@ -1,5 +1,4 @@
 import ckan.plugins as plugins
-import ckan.tests.helpers as helpers
 
 class TestReportPlugin(helpers.FunctionalTestBase):
     @classmethod
@@ -18,4 +17,4 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         res = app.get(u'/report')
 
-        assert helpers.body_contains(res, u"Reports")
+        assert u"Reports" in res.body
