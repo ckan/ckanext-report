@@ -1,4 +1,5 @@
 import ckan.plugins as plugins
+import ckan.tests.helpers as helpers
 
 class TestReportPlugin(helpers.FunctionalTestBase):
     @classmethod
