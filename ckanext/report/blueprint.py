@@ -14,7 +14,6 @@ log = logging.getLogger(__name__)
 c = t.c
 
 report = Blueprint(u'report', __name__)
-rule = request.url_rule
 
 def index(self):
     try:
@@ -32,6 +31,7 @@ def view(self, report_name, organization=None, refresh=False):
     except t.ObjectNotFound:
         t.abort(404)
 
+    rule = request.url_rule
     # ensure correct url is being used
     if 'organization' in rule.rule and \
             'organization' not in report['option_defaults']:
