@@ -15,7 +15,7 @@ c = t.c
 
 report = Blueprint(u'report', __name__)
 
-def index(self):
+def index():
     try:
         reports = t.get_action('report_list')({}, {})
     except t.NotAuthorized:
@@ -23,7 +23,7 @@ def index(self):
 
     return t.render('report/index.html', extra_vars={'reports': reports})
 
-def view(self, report_name, organization=None, refresh=False):
+def view(report_name, organization=None, refresh=False):
     try:
         report = t.get_action('report_show')({}, {'id': report_name})
     except t.NotAuthorized:
