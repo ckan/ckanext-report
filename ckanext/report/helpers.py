@@ -17,7 +17,7 @@ def relative_url_for(**kwargs):
     user_specified_params = [(k, v) for k, v in list(tk.request.params.items())
                              if k not in disallowed_params]
 
-    if tk.check_ckan_version(min_version="2.8.0"):
+    if tk.check_ckan_version(min_version="2.9.0"):
         from flask import request
         args = dict(list(request.args.items())
                     + user_specified_params
