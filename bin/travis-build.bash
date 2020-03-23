@@ -89,4 +89,12 @@ mkdir subdir
 mv test.ini subdir
 mv test-nose.ini subdir
 
+if (( $CKAN_MINOR_VERSION >= 9 ))
+then
+    ckan -c subdir/test.ini report initdb
+else
+    paster report initdb -c subdir/test.ini
+fi
+
+
 echo "travis-build.bash is done."
