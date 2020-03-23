@@ -1,3 +1,4 @@
+from builtins import str
 import json
 from flask import Blueprint, request
 

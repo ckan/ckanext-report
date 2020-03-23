@@ -1,3 +1,6 @@
+from builtins import str
+from past.builtins import basestring
+from builtins import object
 import logging
 import copy
 import re
@@ -198,17 +201,17 @@ class ReportRegistry(object):
 
     def get_names(self):
         return [(r.plugin, r.name, r.title)
-                for r in sorted(self._reports.values(), key=lambda r: r.plugin)]
+                for r in sorted(list(self._reports.values()), key=lambda r: r.plugin)]
 
     def get_reports(self):
-        return sorted(self._reports.values(), key=lambda r: r.title)
+        return sorted(list(self._reports.values()), key=lambda r: r.title)
 
     def get_report(self, report_name):
         return self._reports[report_name]
 
     def refresh_cache_for_all_reports(self):
         '''Generates all the reports for all the option combinations and caches them.'''
-        for report in self._reports.values():
+        for report in list(self._reports.values()):
             report.refresh_cache_for_all_options()
 
 

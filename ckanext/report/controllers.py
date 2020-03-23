@@ -1,3 +1,4 @@
+from builtins import str
 import datetime
 
 from ckan.lib.helpers import json

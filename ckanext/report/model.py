@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 
+from builtins import object
 import datetime
 import logging
 import json
@@ -62,7 +63,7 @@ class DataCache(object):
     """
 
     def __init__(self, **kwargs):
-        for k, v in kwargs.items():
+        for k, v in list(kwargs.items()):
             setattr(self, k, v)
 
     @classmethod

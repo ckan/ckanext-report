@@ -1,7 +1,14 @@
 '''
 These functions are for use by other extensions for their reports.
 '''
+from __future__ import division
 
+from future import standard_library
+standard_library.install_aliases()
+from builtins import str
+from builtins import zip
+from past.builtins import basestring
+from past.utils import old_div
 import datetime
 from collections import OrderedDict
 
@@ -64,11 +71,11 @@ def dataset_notes(pkg):
 def percent(numerator, denominator):
     if denominator == 0:
         return 100 if numerator else 0
-    return int((numerator * 100.0) / denominator)
+    return int(old_div((numerator * 100.0), denominator))
 
 def make_csv_from_dicts(rows):
     import csv
-    import cStringIO as StringIO
+    import io as StringIO
 
     csvout = StringIO.StringIO()
     csvwriter = csv.writer(
@@ -83,7 +90,7 @@ def make_csv_from_dicts(rows):
     for row in rows:
         new_headers = set(row.keys()) - headers_set
         headers_set |= new_headers
-        for header in row.keys():
+        for header in list(row.keys()):
             if header in new_headers:
                 headers_ordered.append(header)
     csvwriter.writerow(headers_ordered)
@@ -93,8 +100,8 @@ def make_csv_from_dicts(rows):
             item = row.get(header, 'no record')
             if isinstance(item, datetime.datetime):
                 item = item.strftime('%Y-%m-%d %H:%M')
-            elif isinstance(item, (int, long, float, list, tuple)):
-                item = unicode(item)
+            elif isinstance(item, (int, int, float, list, tuple)):
+                item = str(item)
             elif item is None:
                 item = ''
             else:
@@ -115,7 +122,7 @@ def ensure_data_is_dicts(data):
         new_data = []
         columns = data['columns']
         for row in data['table']:
-            new_data.append(OrderedDict(zip(columns, row)))
+            new_data.append(OrderedDict(list(zip(columns, row))))
         data['table'] = new_data
         del data['columns']
 
@@ -131,7 +138,7 @@ def anonymise_user_names(data, organization=None):
     except ImportError:
         # If this is not DGU then cannot do the anonymization
         return
-    column_names = data['table'][0].keys() if data['table'] else []
+    column_names = list(data['table'][0].keys()) if data['table'] else []
     for col in column_names:
         if col.lower() in ('user', 'username', 'user name', 'author'):
             for row in data['table']:
