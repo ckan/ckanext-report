@@ -25,8 +25,9 @@ class TestReportPlugin(helpers.FunctionalTestBase):
 
         assert "Reports" in res.body
 
-    def test_tagless_report_listed(self, app):
+    def test_tagless_report_listed(self):
         u"""Test tagless report is listed on report page"""
+        app = self._get_test_app()
         res = app.get(u'/report')
 
-        assert helpers.body_contains(res, u'href="/report/tagless-datasets"')
+        assert 'href="/report/tagless-datasets"' in res.body
