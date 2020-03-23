@@ -22,7 +22,7 @@ data - other data values, as a dict
       {% for row in table %}
         <tr>
           <td>
-            <a href="{{ h.url_for(controller='package', action='view', id=row.name) }}">
+            <a href="{{ h.url_for(controller='dataset' if h.ckan_version() > '2.9' else 'package', action='read', id=row.name) }}">
               {{ row.title }}
             </a>
           </td>

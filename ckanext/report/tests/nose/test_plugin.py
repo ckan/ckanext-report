@@ -1,5 +1,6 @@
 import ckan.plugins as plugins
-import ckan.tests.helpers as helpers
+from ckan.tests import helpers, factories
+from ckanext.report import model as report_model
 
 class TestReportPlugin(helpers.FunctionalTestBase):
     @classmethod
@@ -9,6 +10,8 @@ class TestReportPlugin(helpers.FunctionalTestBase):
             plugins.load(u'report')
         if not plugins.plugin_loaded(u'tagless_report'):
             plugins.load(u'tagless_report')
+
+        report_model.init_tables()
 
     @classmethod
     def teardown_class(cls):
@@ -31,3 +34,13 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         res = app.get(u'/report')
 
         assert 'href="/report/tagless-datasets"' in res.body
+
+    def test_tagless_report(self):
+        u"""Test tagless report generation"""
+        dataset = factories.Dataset()
+
+        app = self._get_test_app()
+        res = app.get(u'/report/tagless-datasets')
+
+        assert "Datasets which have no tags." in res.body
+        assert 'href="/dataset/' + dataset['name'] + '"' in res.body
