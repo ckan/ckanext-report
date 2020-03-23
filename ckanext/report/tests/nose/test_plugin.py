@@ -44,4 +44,4 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         res = app.get(u'/report/tagless-datasets')
 
         assert_in("Datasets which have no tags.", res.body)
-        assert_in('href="/dataset/test_dataset_01"', res.body)
+        assert_in('href="/dataset/test_dataset_00"', res.body)
