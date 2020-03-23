@@ -12,9 +12,9 @@ class TestReportPlugin(helpers.FunctionalTestBase):
 
     @classmethod
     def teardown_class(cls):
-        if p.plugin_loaded(u'report'):
+        if plugins.plugin_loaded(u'report'):
             plugins.unload(u'report')
-        if p.plugin_loaded(u'tagless_report'):
+        if plugins.plugin_loaded(u'tagless_report'):
             plugins.unload(u'tagless_report')
         super(TestReportPlugin, cls).teardown_class()
 
