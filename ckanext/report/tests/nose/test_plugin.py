@@ -1,6 +1,7 @@
 import ckan.plugins as plugins
 from ckan.tests import helpers, factories
 from ckanext.report import model as report_model
+from nose.tools import assert_in
 
 class TestReportPlugin(helpers.FunctionalTestBase):
     @classmethod
@@ -42,5 +43,5 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         app = self._get_test_app()
         res = app.get(u'/report/tagless-datasets')
 
-        assert "Datasets which have no tags." in res.body
-        assert 'href="/dataset/test_dataset_01"' in res.body
+        assert_in("Datasets which have no tags.", res.body)
+        assert_in('href="/dataset/test_dataset_01"', res.body)
