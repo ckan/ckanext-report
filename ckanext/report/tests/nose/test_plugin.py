@@ -7,10 +7,15 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         super(TestReportPlugin, cls).setup_class()
         if not plugins.plugin_loaded(u'report'):
             plugins.load(u'report')
+        if not plugins.plugin_loaded(u'tagless_report'):
+            plugins.load(u'tagless_report')
 
     @classmethod
     def teardown_class(cls):
-        plugins.unload(u'report')
+        if p.plugin_loaded(u'report'):
+            plugins.unload(u'report')
+        if p.plugin_loaded(u'tagless_report'):
+            plugins.unload(u'tagless_report')
         super(TestReportPlugin, cls).teardown_class()
 
     def test_report_routes(self):
@@ -19,3 +24,9 @@ class TestReportPlugin(helpers.FunctionalTestBase):
         res = app.get(u'/report')
 
         assert "Reports" in res.body
+
+    def test_tagless_report_listed(self, app):
+        u"""Test tagless report is listed on report page"""
+        res = app.get(u'/report')
+
+        assert helpers.body_contains(res, u'href="/report/tagless-datasets"')

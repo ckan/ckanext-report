@@ -11,3 +11,10 @@ class TestReportPlugin(object):
         res = app.get(u'/report')
 
         assert helpers.body_contains(res, u"Reports")
+
+    @pytest.mark.ckan_config(u'ckan.plugins', u'report tagless_report')
+    def test_tagless_report_listed(self, app):
+        u"""Test tagless report is listed on report page"""
+        res = app.get(u'/report')
+
+        assert helpers.body_contains(res, u'href="/report/tagless-datasets"')
