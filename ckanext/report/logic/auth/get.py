@@ -1,13 +1,16 @@
 from ckanext.report.report_registry import ReportRegistry
 from ckan.logic import auth_allow_anonymous_access, get_or_bust
 
+
 @auth_allow_anonymous_access
 def report_list(context=None, data_dict=None):
     return {'success': True}
 
+
 @auth_allow_anonymous_access
 def report_show(context=None, data_dict=None):
     return {'success': True}
+
 
 @auth_allow_anonymous_access
 def report_data_get(context=None, data_dict=None):
@@ -22,6 +25,7 @@ def report_data_get(context=None, data_dict=None):
             return {'success': False}
 
     return {'success': True}
+
 
 @auth_allow_anonymous_access
 def report_key_get(context=None, data_dict=None):

@@ -1,3 +1,5 @@
+from past.builtins import xrange
+
 from ckanext.report.report_registry import ReportRegistry
 from ckan.plugins import toolkit as tk
 import ckan.lib.helpers
@@ -33,8 +35,8 @@ def chunks(list_, size):
 
 def organization_list():
     organizations = model.Session.query(model.Group).\
-        filter(model.Group.type=='organization').\
-        filter(model.Group.state=='active').order_by('title')
+        filter(model.Group.type == 'organization').\
+        filter(model.Group.state == 'active').order_by('title')
     for organization in organizations:
         yield (organization.name, organization.title)
 

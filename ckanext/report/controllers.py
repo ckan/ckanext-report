@@ -1,3 +1,5 @@
+from builtins import str, int
+
 import datetime
 
 from ckan.lib.helpers import json
@@ -5,7 +7,7 @@ import ckan.plugins.toolkit as t
 import ckanext.report.helpers as helpers
 from ckanext.report.report_registry import Report
 from ckan.lib.render import TemplateNotFound
-from ckan.common import OrderedDict
+from collections import OrderedDict
 
 
 log = __import__('logging').getLogger(__name__)
@@ -33,13 +35,13 @@ class ReportController(t.BaseController):
 
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \
-            'organization' not in report['option_defaults']:
-                t.redirect_to(helpers.relative_url_for(organization=None))
-        elif 'organization' not in t.request.environ['pylons.routes_dict'] and\
-            'organization' in report['option_defaults'] and \
-            report['option_defaults']['organization']:
-                org = report['option_defaults']['organization']
-                t.redirect_to(helpers.relative_url_for(organization=org))
+                'organization' not in report['option_defaults']:
+            t.redirect_to(helpers.relative_url_for(organization=None))
+        elif 'organization' not in t.request.environ['pylons.routes_dict'] and \
+                'organization' in report['option_defaults'] and \
+                report['option_defaults']['organization']:
+            org = report['option_defaults']['organization']
+            t.redirect_to(helpers.relative_url_for(organization=org))
         if 'organization' in t.request.params:
             # organization should only be in the url - let the param overwrite
             # the url.
@@ -71,7 +73,6 @@ class ReportController(t.BaseController):
                 log.warn('Not displaying report option HTML for param %s as no template found')
                 continue
 
-
         # Alternative way to refresh the cache - not in the UI, but is
         # handy for testing
         try:
@@ -87,9 +88,9 @@ class ReportController(t.BaseController):
 
         if refresh:
             try:
-               t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
+                t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
             except t.NotAuthorized:
-               t.abort(401)
+                t.abort(401)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 
@@ -164,8 +165,8 @@ def make_csv_from_dicts(rows):
             item = row.get(header, 'no record')
             if isinstance(item, datetime.datetime):
                 item = item.strftime('%Y-%m-%d %H:%M')
-            elif isinstance(item, (int, long, float, list, tuple)):
-                item = unicode(item)
+            elif isinstance(item, (int, float, list, tuple)):
+                item = str(item)
             elif item is None:
                 item = ''
             else:
@@ -173,7 +174,7 @@ def make_csv_from_dicts(rows):
             items.append(item)
         try:
             csvwriter.writerow(items)
-        except Exception, e:
+        except Exception as e:
             raise Exception("%s: %s, %s" % (e, row, items))
     csvout.seek(0)
     return csvout.read()

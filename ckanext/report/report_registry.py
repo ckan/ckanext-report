@@ -1,3 +1,5 @@
+from past.builtins import basestring
+
 import logging
 import copy
 import re
@@ -5,7 +7,7 @@ import re
 from paste.deploy.converters import asbool
 
 from ckan import model
-from ckan.common import OrderedDict
+from collections import OrderedDict
 from ckanext.report.interfaces import IReport
 
 log = logging.getLogger(__name__)
@@ -24,8 +26,7 @@ class Report(object):
         missing_required_keys = REPORT_KEYS_REQUIRED - set(report_info_dict.keys())
         assert not missing_required_keys, 'Report info dict missing keys %r: '\
             '%r' % (missing_required_keys, report_info_dict)
-        unknown_keys = set(report_info_dict.keys()) - REPORT_KEYS_REQUIRED - \
-                       REPORT_KEYS_OPTIONAL
+        unknown_keys = set(report_info_dict.keys()) - REPORT_KEYS_REQUIRED - REPORT_KEYS_OPTIONAL
         assert not unknown_keys, 'Report info dict has unrecognized keys %r: '\
             '%r' % (unknown_keys, report_info_dict)
         if not report_info_dict['option_defaults']:
@@ -76,7 +77,7 @@ class Report(object):
         '''Generates the report for all the option combinations and caches them.'''
         log.info('Report: %s %s', self.plugin, self.name)
         option_combinations = list(self.option_combinations()) \
-                              if self.option_combinations else [{}]
+            if self.option_combinations else [{}]
         for option_dict in option_combinations:
             self.refresh_cache(option_dict)
         log.info('  report done')
@@ -130,7 +131,7 @@ class Report(object):
         '''
         defaulted_options = copy.deepcopy(defaults)
         for key in defaulted_options:
-            if not key in options:
+            if key not in options:
                 if defaulted_options[key] is True:
                     # Checkboxes don't submit a value when False, so cannot
                     # default to True. i.e. to get a True value, you always
