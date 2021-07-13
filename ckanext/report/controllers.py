@@ -1,3 +1,5 @@
+from builtins import str, int
+
 import datetime
 
 from ckan.lib.helpers import json
@@ -164,8 +166,8 @@ def make_csv_from_dicts(rows):
             item = row.get(header, 'no record')
             if isinstance(item, datetime.datetime):
                 item = item.strftime('%Y-%m-%d %H:%M')
-            elif isinstance(item, (int, long, float, list, tuple)):
-                item = unicode(item)
+            elif isinstance(item, (int, float, list, tuple)):
+                item = str(item)
             elif item is None:
                 item = ''
             else:
