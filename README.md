@@ -19,11 +19,11 @@ TODO:
 * Stop a report from being generated multiple times in parallel (unnecessary waste) - use a queue?
 * Stop more than one report being generated in parallel (high load for the server) - maybe use a queue.
 
-Compatibility: Requires CKAN version 2.1 or later (but can be easily adapted for older versions).
+Compatibility: Requires CKAN version 2.1 or later
 
-Status: in production at data.gov.uk but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/yaditi/ckanext-report/tree/geoversion
+Status: was in production at data.gov.uk around 2014-2016, but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/yaditi/ckanext-report/tree/geoversion
 
-Author(s): David Read
+Author(s): David Read and contibutors
 
 
 ## Install & setup
