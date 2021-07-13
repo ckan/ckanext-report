@@ -1,3 +1,5 @@
+from past.builtins import basestring
+
 import logging
 import copy
 import re

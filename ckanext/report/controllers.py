@@ -173,7 +173,7 @@ def make_csv_from_dicts(rows):
             items.append(item)
         try:
             csvwriter.writerow(items)
-        except Exception, e:
+        except Exception as e:
             raise Exception("%s: %s, %s" % (e, row, items))
     csvout.seek(0)
     return csvout.read()
