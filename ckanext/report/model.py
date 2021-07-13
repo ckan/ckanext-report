@@ -76,7 +76,6 @@ class DataCache(object):
                     .filter(cls.object_id == object_id)\
                     .first()
         if not item:
-            #log.debug('Does not exist in cache: %s/%s', object_id, key)
             return (None, None)
 
         if max_age:
@@ -95,11 +94,10 @@ class DataCache(object):
                 # Python 2.7's json library has object_pairs_hook
                 import json
                 value = json.loads(value, object_pairs_hook=OrderedDict)
-            except TypeError: # Untested
+            except TypeError:  # Untested
                 # Python 2.4-2.6
                 import simplejson as json
                 value = json.loads(value, object_pairs_hook=OrderedDict)
-        #log.debug('Cache load: %s/%s "%s"...', object_id, key, repr(value)[:40])
         return value, item.created
 
     @classmethod
@@ -131,7 +129,9 @@ class DataCache(object):
         model.Session.flush()
         return item.created
 
+
 mapper(DataCache, data_cache_table)
+
 
 def init_tables():
     metadata.create_all(model.meta.engine)

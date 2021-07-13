@@ -35,13 +35,13 @@ class ReportController(t.BaseController):
 
         # ensure correct url is being used
         if 'organization' in t.request.environ['pylons.routes_dict'] and \
-            'organization' not in report['option_defaults']:
-                t.redirect_to(helpers.relative_url_for(organization=None))
-        elif 'organization' not in t.request.environ['pylons.routes_dict'] and\
-            'organization' in report['option_defaults'] and \
-            report['option_defaults']['organization']:
-                org = report['option_defaults']['organization']
-                t.redirect_to(helpers.relative_url_for(organization=org))
+                'organization' not in report['option_defaults']:
+            t.redirect_to(helpers.relative_url_for(organization=None))
+        elif 'organization' not in t.request.environ['pylons.routes_dict'] and \
+                'organization' in report['option_defaults'] and \
+                report['option_defaults']['organization']:
+            org = report['option_defaults']['organization']
+            t.redirect_to(helpers.relative_url_for(organization=org))
         if 'organization' in t.request.params:
             # organization should only be in the url - let the param overwrite
             # the url.
@@ -73,7 +73,6 @@ class ReportController(t.BaseController):
                 log.warn('Not displaying report option HTML for param %s as no template found')
                 continue
 
-
         # Alternative way to refresh the cache - not in the UI, but is
         # handy for testing
         try:
@@ -89,9 +88,9 @@ class ReportController(t.BaseController):
 
         if refresh:
             try:
-               t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
+                t.get_action('report_refresh')({}, {'id': report_name, 'options': options})
             except t.NotAuthorized:
-               t.abort(401)
+                t.abort(401)
             # Don't want the refresh=1 in the url once it is done
             t.redirect_to(helpers.relative_url_for(refresh=None))
 

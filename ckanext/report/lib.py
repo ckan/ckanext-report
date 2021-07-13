@@ -5,6 +5,7 @@ These functions are for use by other extensions for their reports.
 import ckan.plugins as p
 from past.builtins import basestring
 
+
 def all_organizations(include_none=False):
     '''Yields all the organization names, and also None if requested. Useful
     when assembling option_combinations'''
@@ -12,8 +13,8 @@ def all_organizations(include_none=False):
     if include_none:
         yield None
     organizations = model.Session.query(model.Group).\
-        filter(model.Group.type=='organization').\
-        filter(model.Group.state=='active').order_by('name')
+        filter(model.Group.type == 'organization').\
+        filter(model.Group.state == 'active').order_by('name')
     for organization in organizations:
         yield organization.name
 
