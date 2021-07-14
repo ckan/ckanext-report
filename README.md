@@ -12,16 +12,16 @@ Example report:
 
 ![Demo report image](report-demo.png)
 
-A number of extensions currently offer reports that rely on this extension, e.g. [ckanext-archiver](https://github.com/datagovuk/ckanext-archiver/blob/master/ckanext/archiver/reports.py), [ckanext-qa](https://github.com/datagovuk/ckanext-qa/blob/master/ckanext/qa/reports.py), [ckanext-dgu](https://github.com/datagovuk/ckanext-dgu/blob/master/ckanext/dgu/lib/reports.py).
+A number of extensions currently offer reports that rely on this extension, e.g. [ckanext-archiver](https://github.com/ckan/ckanext-archiver/blob/master/ckanext/archiver/reports.py), [ckanext-qa](https://github.com/ckan/ckanext-qa/blob/master/ckanext/qa/reports.py), [ckanext-dgu](https://github.com/datagovuk/ckanext-dgu/blob/master/ckanext/dgu/lib/reports.py).
 
 TODO:
 
 * Stop a report from being generated multiple times in parallel (unnecessary waste) - use a queue?
 * Stop more than one report being generated in parallel (high load for the server) - maybe use a queue.
 
-Compatibility: Requires CKAN version 2.1 or later
+Compatibility: Requires CKAN version 2.1 or later. Python 3 support is pending.
 
-Status: was in production at data.gov.uk around 2014-2016, but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/yaditi/ckanext-report/tree/geoversion
+Status: was in production at data.gov.uk around 2014-2016, but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/GSA/ckanext-report/tree/geoversion
 
 Author(s): David Read and contibutors
 
@@ -30,7 +30,7 @@ Author(s): David Read and contibutors
 
 Install ckanext-report into your CKAN virtual environment in the usual way:
 
-    (pyenv) $ pip install -e git+https://github.com/datagovuk/ckanext-report.git#egg=ckanext-report
+    (pyenv) $ pip install -e git+https://github.com/ckan/ckanext-report.git#egg=ckanext-report
 
 Initialize the database tables needed by ckanext-report:
 
