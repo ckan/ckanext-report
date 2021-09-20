@@ -16,6 +16,7 @@ c = t.c
 
 report = Blueprint(u'report', __name__)
 
+
 def index():
     try:
         reports = t.get_action('report_list')({}, {})
@@ -23,6 +24,7 @@ def index():
         t.abort(401)
 
     return t.render('report/index.html', extra_vars={'reports': reports})
+
 
 def view(report_name, organization=None, refresh=False):
     try:
@@ -34,12 +36,10 @@ def view(report_name, organization=None, refresh=False):
 
     rule = request.url_rule
     # ensure correct url is being used
-    if 'organization' in rule.rule and \
-        'organization' not in report['option_defaults']:
+    if 'organization' in rule.rule and 'organization' not in report['option_defaults']:
         t.redirect_to(helpers.relative_url_for(organization=None))
-    elif 'organization' not in rule.rule and \
-        'organization' in report['option_defaults'] and \
-        report['option_defaults']['organization']:
+    elif 'organization' not in rule.rule and 'organization' in report['option_defaults'] and \
+            report['option_defaults']['organization']:
         org = report['option_defaults']['organization']
         t.redirect_to(helpers.relative_url_for(organization=org))
     if 'organization' in t.request.params:
@@ -72,7 +72,6 @@ def view(report_name, organization=None, refresh=False):
         except TemplateNotFound:
             log.warn('Not displaying report option HTML for param %s as no template found')
             continue
-
 
     # Alternative way to refresh the cache - not in the UI, but is
     # handy for testing
@@ -138,9 +137,11 @@ def view(report_name, organization=None, refresh=False):
         'report_template': report['template'],
         'are_some_results': are_some_results})
 
+
 report.add_url_rule(u'/report', view_func=index)
 report.add_url_rule(u'/report/<report_name>', view_func=view)
 report.add_url_rule(u'/report/<report_name>/<organization>', view_func=view)
+
 
 def get_blueprints():
     return [report]

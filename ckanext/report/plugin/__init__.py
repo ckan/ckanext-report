@@ -13,6 +13,7 @@ except toolkit.CkanVersionException:
 else:
     from ckanext.report.plugin.flask_plugin import MixinPlugin
 
+
 class ReportPlugin(MixinPlugin, p.SingletonPlugin):
     p.implements(p.IRoutes, inherit=True)
     p.implements(p.IConfigurer)

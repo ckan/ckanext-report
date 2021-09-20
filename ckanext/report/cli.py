@@ -3,6 +3,7 @@
 import click
 from ckanext.report import model as report_model
 
+
 def get_commands():
     return [report]
 
@@ -11,6 +12,7 @@ def get_commands():
 def report():
     """Generates reports"""
     pass
+
 
 @report.command()
 def initdb():
