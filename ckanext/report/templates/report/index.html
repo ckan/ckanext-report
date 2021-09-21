@@ -14,7 +14,7 @@
         {% if loop.index0%3==0 %}<div class="clearfix visible-md clearfix-ie7"></div>{% endif %}
         {% if loop.index0%2==0 %}<div class="clearfix visible-sm"></div>{% endif %}
         <div class="col-lg-3 col-md-4 col-sm-6">
-          {% set report_url=h.url_for('report', report_name=report.name, **h.report__explicit_default_options(report.name)) %}
+          {% set report_url=h.url_for('report.view', report_name=report.name, **h.report__explicit_default_options(report.name)) %}
           <div class="report-summary">
             <a href="{{ report_url }}" class="report-header">
               <div class="report-title">{{ report.title }}</div>
