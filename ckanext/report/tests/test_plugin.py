@@ -4,9 +4,11 @@ from ckan.tests import helpers, factories
 
 import ckanext.report.model as report_model
 
+
 @pytest.fixture
 def report_setup():
     report_model.init_tables()
+
 
 @pytest.mark.ckan_config(u'ckan.plugins', u'report tagless_report')
 @pytest.mark.usefixtures(u'clean_db', u'with_plugins', u'report_setup')
@@ -25,7 +27,7 @@ class TestReportPlugin(object):
         assert helpers.body_contains(res, u'Tagless datasets')
         assert helpers.body_contains(res, u'href="/report/tagless-datasets"')
 
-    def test_tagless_report(self,app):
+    def test_tagless_report(self, app):
         u"""Test tagless report generation"""
         dataset = factories.Dataset()
 
