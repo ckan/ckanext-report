@@ -25,14 +25,14 @@ class TestReportPlugin(object):
         u"""Test report routes"""
         res = app.get(u'/report')
 
-        assert _assert_in_body(u"Reports", res)
+        _assert_in_body(u"Reports", res)
 
     def test_tagless_report_listed(self, app):
         u"""Test tagless report is listed on report page"""
         res = app.get(u'/report')
 
-        assert _assert_in_body(u'Tagless datasets', res)
-        assert _assert_in_body(u'href="/report/tagless-datasets"', res)
+        _assert_in_body(u'Tagless datasets', res)
+        _assert_in_body(u'href="/report/tagless-datasets"', res)
 
     def test_tagless_report(self, app):
         u"""Test tagless report generation"""
@@ -40,5 +40,5 @@ class TestReportPlugin(object):
 
         res = app.get(u'/report/tagless-datasets')
 
-        assert _assert_in_body(u"Datasets which have no tags.", res)
-        assert _assert_in_body('href="/dataset/' + dataset['name'] + '"', res)
+        _assert_in_body(u"Datasets which have no tags.", res)
+        _assert_in_body('href="/dataset/' + dataset['name'] + '"', res)
