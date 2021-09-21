@@ -1,4 +1,5 @@
 import pytest
+import six
 
 from ckan.tests import helpers, factories
 
