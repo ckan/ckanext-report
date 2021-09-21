@@ -22,7 +22,7 @@ data - other data values, as a dict
       {% for row in table %}
         <tr>
           <td>
-            <a href="{{ h.url_for(controller='dataset', action='view', id=row.name) }}">
+            <a href="{{ h.url_for(controller='dataset', action='read', id=row.name) }}">
               {{ row.title }}
             </a>
           </td>
