@@ -3,7 +3,7 @@
 {% block title %}{{ _('Reports') }} - {{ super() }}{% endblock %}
 
 {% block breadcrumb_content %}
-  {{ h.build_nav('reports', _('Reports')) }}
+  {{ h.nav_link(_('Reports'), named_route='report.index') }}
 {% endblock %}
 
 {% block primary_content_inner %}
