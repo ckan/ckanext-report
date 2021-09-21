@@ -131,6 +131,9 @@ Report (snippet)
 table - main data, as a list of rows, each row is a dict
 data - other data values, as a dict
 #}
+
+{% set ckan_29_or_higher = h.ckan_version().split('.')[1] | int >= 9 %}
+{% set dataset_read_route = 'dataset.read' if ckan_29_or_higher else 'dataset_read' %}
 <ul>
     <li>Datasets without tags: {{ table|length }} / {{ data['num_packages'] }} ({{ data['packages_without_tags_percent'] }})</li>
     <li>Average tags per package: {{ data['average_tags_per_package'] }} tags</li>
@@ -149,7 +152,7 @@ data - other data values, as a dict
       {% for row in table %}
         <tr>
           <td>
-            <a href="{{ h.url_for(controller='dataset', action='read', id=row.name) }}">
+            <a href="{{ h.url_for(dataset_read_route, id=row.name) }}">
               {{ row.title }}
             </a>
           </td>
