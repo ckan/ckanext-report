@@ -4,7 +4,7 @@ from flask import Blueprint, request
 
 import ckan.plugins.toolkit as t
 import ckan.lib.helpers as helpers
-from ckan.lib.render import TemplateNotFound
+from jinja2.exceptions import TemplateNotFound
 
 from ckanext.report.report_registry import Report
 from ckanext.report.lib import make_csv_from_dicts, ensure_data_is_dicts, anonymise_user_names
