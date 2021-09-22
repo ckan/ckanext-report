@@ -41,4 +41,6 @@ def list():
 @click.argument(u'report_name')
 @click.argument(u'report_options', nargs=-1)
 def generate_for_options(report_name, report_options):
-    utils.generate_for_options(report_name, report_options)
+    message = utils.generate_for_options(report_name, report_options)
+    if message:
+        click.secho(message, fg=u"red")

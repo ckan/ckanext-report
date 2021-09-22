@@ -39,7 +39,7 @@ def generate_for_options(report_name, options):
 
     for option_arg in options:
         if '=' not in option_arg:
-            return print('Option needs an "=" sign in it: "%s"' % option_arg)
+            return 'Option needs an "=" sign in it: "%s"' % option_arg
         equal_pos = option_arg.find('=')
         key, value = option_arg[:equal_pos], option_arg[equal_pos+1:]
         if value == '':

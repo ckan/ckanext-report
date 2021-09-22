@@ -64,7 +64,9 @@ class ReportCommand(p.toolkit.CkanCommand):
                 self.log.info("Running reports => %s", report_list)
             self._generate(report_list)
         elif cmd == 'generate-for-options':
-            utils.generate_for_options(self.args[1], self.self.args[2:])
+            message = utils.generate_for_options(self.args[1], self.self.args[2:])
+            if message:
+                self.parser.error(message)
         else:
             self.parser.error('Command not recognized: %r' % cmd)
 
