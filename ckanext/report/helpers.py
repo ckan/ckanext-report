@@ -17,14 +17,28 @@ def relative_url_for(**kwargs):
                              'protocol', 'qualified'))
     user_specified_params = [(k, v) for k, v in tk.request.params.items()
                              if k not in disallowed_params]
-    args = dict(tk.request.environ['pylons.routes_dict'].items()
-                + user_specified_params
-                + kwargs.items())
-    # remove blanks
-    for k, v in args.items():
-        if not v:
-            del args[k]
-    return tk.url_for(**args)
+    if tk.check_ckan_version(min_version="2.9.0"):
+        from flask import request
+        args = dict(list(request.args.items())
+                    + user_specified_params
+                    + list(kwargs.items()))
+
+        # remove blanks
+        for k, v in list(args.items()):
+            if not v:
+                del args[k]
+        return tk.url_for(request.url_rule.rule, **args)
+
+    else:
+        args = dict(list(tk.request.environ['pylons.routes_dict'].items())
+                    + user_specified_params
+                    + list(kwargs.items()))
+
+        # remove blanks
+        for k, v in args.items():
+            if not v:
+                del args[k]
+        return tk.url_for(**args)
 
 
 def chunks(list_, size):

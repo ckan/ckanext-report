@@ -1,9 +1,44 @@
 import pytest
+import six
 
-from ckan.plugins import plugin_loaded
+from ckan.tests import factories
+import ckanext.report.model as report_model
 
 
-@pytest.mark.ckan_config('ckan.plugins', 'report')
-@pytest.mark.usefixtures('with_plugins')
-def test_plugin():
-    assert plugin_loaded('report')
+def _assert_in_body(string, response):
+    if six.PY2:
+        assert string in response.body.decode('utf8')
+    else:
+        assert string in response.body
+
+
+@pytest.fixture
+def report_setup():
+    report_model.init_tables()
+
+
+@pytest.mark.ckan_config(u'ckan.plugins', u'report tagless_report')
+@pytest.mark.usefixtures(u'clean_db', u'with_plugins', u'report_setup')
+class TestReportPlugin(object):
+
+    def test_report_routes(self, app):
+        u"""Test report routes"""
+        res = app.get(u'/report')
+
+        _assert_in_body(u"Reports", res)
+
+    def test_tagless_report_listed(self, app):
+        u"""Test tagless report is listed on report page"""
+        res = app.get(u'/report')
+
+        _assert_in_body(u'Tagless datasets', res)
+        _assert_in_body(u'href="/report/tagless-datasets"', res)
+
+    def test_tagless_report(self, app):
+        u"""Test tagless report generation"""
+        dataset = factories.Dataset()
+
+        res = app.get(u'/report/tagless-datasets')
+
+        _assert_in_body(u"Datasets which have no tags.", res)
+        _assert_in_body('href="/dataset/' + dataset['name'] + '"', res)
