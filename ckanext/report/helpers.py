@@ -27,7 +27,7 @@ def relative_url_for(**kwargs):
         for k, v in list(args.items()):
             if not v:
                 del args[k]
-        return tk.url_for(request.url_rule.rule, **args)
+        return tk.url_for(request.path, **args)
 
     else:
         args = dict(list(tk.request.environ['pylons.routes_dict'].items())
