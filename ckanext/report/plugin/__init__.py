@@ -15,7 +15,6 @@ else:
 
 
 class ReportPlugin(MixinPlugin, p.SingletonPlugin):
-    p.implements(p.IRoutes, inherit=True)
     p.implements(p.IConfigurer)
     p.implements(p.ITemplateHelpers)
     p.implements(p.IActions, inherit=True)
