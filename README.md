@@ -26,7 +26,9 @@ TODO:
 | 2.6 and earlier | yes                 |
 | 2.7             | yes                 |
 | 2.8             | yes                 |
-| 2.9             | yes                 |
+| 2.9-py2         | yes                 |
+| 2.9  (py3)      | yes                 |
+| 2.10 (py3)      | yes                 |
 
 Status: was in production at data.gov.uk around 2014-2016, but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/GSA/ckanext-report/tree/geoversion
 
@@ -41,7 +43,8 @@ Install ckanext-report into your CKAN virtual environment in the usual way:
 
 Initialize the database tables needed by ckanext-report:
 
-    (pyenv) $ paster --plugin=ckanext-report report initdb --config=mysite.ini
+    CKAN < 2.9  (pyenv) $ paster --plugin=ckanext-report report initdb --config=mysite.ini
+    CKAN >= 2.9 (pyenv) $ ckan -c mysite.ini report initdb
 
 Enable the plugin. In your config (e.g. development.ini or production.ini) add ``report`` to your ckan.plugins. e.g.:
 
