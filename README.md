@@ -151,7 +151,7 @@ data - other data values, as a dict
     <li>Average tags per package: {{ data['average_tags_per_package'] }} tags</li>
 </ul>
 
-<table class="table table-bordered table-condensed tablesorter" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
+<table class="table table-bordered table-condensed" id="report-table" style="width: 100%; table-layout:fixed; margin-top: 8px;">
     <thead>
       <tr>
         <th>Dataset</th>

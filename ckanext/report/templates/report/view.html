@@ -57,24 +57,3 @@
       {% endif %}
   </div>
 {% endblock%}
-
-{% block scripts %}
-    {{ super() }}
-    <!--! Tablesorter allows table sorting by clicking on each column -->
-    <script type="text/javascript" src="/scripts/vendor/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript">
-      //<![CDATA[
-      $(document).ready(function()
-        {
-          $("#report-table").tablesorter({
-              dateFormat: "uk",
-          });
-          $(".js-auto-submit").change(function () {
-              $(this).closest("form").submit();
-          });
-        }
-      );
-    // ]]>
-    </script>
-{% endblock%}
-
