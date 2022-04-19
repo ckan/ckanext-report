@@ -1,7 +1,7 @@
 '''
 These functions are for use by other extensions for their reports.
 '''
-
+from builtins import str
 import ckan.plugins as p
 from past.builtins import basestring
 from collections import OrderedDict
@@ -70,7 +70,7 @@ def percent(numerator, denominator):
 
 def make_csv_from_dicts(rows):
     import csv
-    import cStringIO as StringIO
+    import io as StringIO
 
     csvout = StringIO.StringIO()
     csvwriter = csv.writer(
@@ -93,14 +93,14 @@ def make_csv_from_dicts(rows):
         items = []
         for header in headers_ordered:
             item = row.get(header, 'no record')
-            if isinstance(item, datetime.datetime):
+            if isinstance(item, datetime):
                 item = item.strftime('%Y-%m-%d %H:%M')
             elif isinstance(item, (int, float, list, tuple)):
                 item = str(item)
             elif item is None:
                 item = ''
             else:
-                item = item.encode('utf8')
+                item = str(item)
             items.append(item)
         try:
             csvwriter.writerow(items)
