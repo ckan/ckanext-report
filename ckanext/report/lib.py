@@ -1,7 +1,7 @@
 '''
 These functions are for use by other extensions for their reports.
 '''
-from builtins import str
+import six
 import ckan.plugins as p
 from past.builtins import basestring
 from collections import OrderedDict
@@ -70,7 +70,10 @@ def percent(numerator, denominator):
 
 def make_csv_from_dicts(rows):
     import csv
-    import io as StringIO
+    if six.PY2:
+        import cStringIO as StringIO
+    else:
+        import io as StringIO
 
     csvout = StringIO.StringIO()
     csvwriter = csv.writer(
