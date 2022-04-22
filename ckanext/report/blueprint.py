@@ -1,13 +1,14 @@
 from builtins import str
 import json
-from flask import Blueprint, request
+from flask import Blueprint, request, make_response
 
 import ckan.plugins.toolkit as t
-import ckan.lib.helpers as helpers
 from jinja2.exceptions import TemplateNotFound
 
 from ckanext.report.report_registry import Report
 from ckanext.report.lib import make_csv_from_dicts, ensure_data_is_dicts, anonymise_user_names
+from ckanext.report.helpers import relative_url_for
+
 
 import logging
 log = logging.getLogger(__name__)
@@ -37,15 +38,15 @@ def view(report_name, organization=None, refresh=False):
     rule = request.url_rule
     # ensure correct url is being used
     if 'organization' in rule.rule and 'organization' not in report['option_defaults']:
-        t.redirect_to(helpers.relative_url_for(organization=None))
+        t.redirect_to(relative_url_for(organization=None))
     elif 'organization' not in rule.rule and 'organization' in report['option_defaults'] and \
             report['option_defaults']['organization']:
         org = report['option_defaults']['organization']
-        t.redirect_to(helpers.relative_url_for(organization=org))
+        t.redirect_to(relative_url_for(organization=org))
     if 'organization' in t.request.params:
         # organization should only be in the url - let the param overwrite
         # the url.
-        t.redirect_to(helpers.relative_url_for())
+        t.redirect_to(relative_url_for())
 
     # options
     options = Report.add_defaults_to_options(t.request.params, report['option_defaults'])
@@ -92,7 +93,7 @@ def view(report_name, organization=None, refresh=False):
         except t.NotAuthorized:
             t.abort(401)
         # Don't want the refresh=1 in the url once it is done
-        t.redirect_to(helpers.relative_url_for(refresh=None))
+        t.redirect_to(relative_url_for(refresh=None))
 
     # Check for any options not allowed by the report
     for key in options:
@@ -115,13 +116,15 @@ def view(report_name, organization=None, refresh=False):
             except t.NotAuthorized:
                 t.abort(401)
             filename = 'report_%s.csv' % key
-            t.response.headers['Content-Type'] = 'application/csv'
-            t.response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
-            return make_csv_from_dicts(data['table'])
+            response = make_response(make_csv_from_dicts(data['table']))
+            response.headers['Content-Type'] = 'application/csv'
+            response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
+            return response
         elif format == 'json':
-            t.response.headers['Content-Type'] = 'application/json'
             data['generated_at'] = report_date
-            return json.dumps(data)
+            response = make_response(json.dumps(data))
+            response.headers['Content-Type'] = 'application/json'
+            return response
         else:
             t.abort(400, 'Format not known - try html, json or csv')
 
@@ -139,7 +142,7 @@ def view(report_name, organization=None, refresh=False):
 
 
 report.add_url_rule(u'/report', view_func=index)
-report.add_url_rule(u'/report/<report_name>', view_func=view)
+report.add_url_rule(u'/report/<report_name>', view_func=view, methods=['GET', 'POST'])
 report.add_url_rule(u'/report/<report_name>/<organization>', view_func=view)
 
 
