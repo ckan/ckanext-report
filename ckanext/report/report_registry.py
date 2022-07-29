@@ -1,13 +1,17 @@
-from past.builtins import basestring
+# encoding: utf-8
 
 import logging
 import copy
 import re
-
-from ckan.plugins.toolkit import asbool
+import six
 
 from ckan import model
-from collections import OrderedDict
+from ckan.plugins.toolkit import asbool
+try:
+    from collections import OrderedDict  # from python 2.7
+except ImportError:
+    from sqlalchemy.util import OrderedDict
+
 from ckanext.report.interfaces import IReport
 
 log = logging.getLogger(__name__)
@@ -57,9 +61,9 @@ class Report(object):
                                         self.option_defaults[key])
             else:
                 value = option_dict[key]
-            if isinstance(value, basestring):
+            if isinstance(value, six.string_types):
                 try:
-                    value = str(value)
+                    value = six.text_type(value)
                 except UnicodeEncodeError:
                     value = value.encode('utf8')
             elif isinstance(value, bool):
@@ -103,7 +107,7 @@ class Report(object):
         entity_name = extract_entity_name(option_dict)
         key = self.generate_key(option_dict)
         data, date = report_model.DataCache.get_if_fresh(
-                entity_name, key, convert_json=True)
+            entity_name, key, convert_json=True)
         if data is None:
             data, date = self.refresh_cache(option_dict)
         return data, date
@@ -135,7 +139,7 @@ class Report(object):
                 if defaulted_options[key] is True:
                     # Checkboxes don't submit a value when False, so cannot
                     # default to True. i.e. to get a True value, you always
-                    # need be expicit in the params.
+                    # need be explicit in the params.
                     defaulted_options[key] = False
                 continue
             value = options[key]

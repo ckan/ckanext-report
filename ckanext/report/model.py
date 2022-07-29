@@ -1,4 +1,4 @@
-from __future__ import absolute_import
+# encoding: utf-8
 
 import datetime
 import logging
@@ -8,7 +8,10 @@ from sqlalchemy import types, Table, Column, Index, MetaData
 from sqlalchemy.orm import mapper
 
 from ckan import model
-from collections import OrderedDict
+try:
+    from collections import OrderedDict  # from python 2.7
+except ImportError:
+    from sqlalchemy.util import OrderedDict
 
 log = logging.getLogger(__name__)
 
