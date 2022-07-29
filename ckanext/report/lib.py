@@ -1,11 +1,17 @@
 '''
 These functions are for use by other extensions for their reports.
 '''
-import six
-import ckan.plugins as p
-from past.builtins import basestring
-from collections import OrderedDict
 from datetime import datetime
+import six
+from six.moves import zip
+from six.moves.cStringIO import StringIO
+try:
+    from collections import OrderedDict  # from python 2.7
+except ImportError:
+    from sqlalchemy.util import OrderedDict
+
+import ckan.plugins as p
+from ckan.plugins.toolkit import config
 
 
 def all_organizations(include_none=False):
@@ -41,7 +47,7 @@ def filter_by_organizations(query, organization, include_sub_organizations):
     from ckan import model
     if not organization:
         return query
-    if isinstance(organization, basestring):
+    if isinstance(organization, six.string_types):
         organization = model.Group.get(organization)
         assert organization
     if include_sub_organizations:
@@ -55,7 +61,6 @@ def filter_by_organizations(query, organization, include_sub_organizations):
 def dataset_notes(pkg):
     '''Returns a string with notes about the given package. It is
     configurable.'''
-    from ckan.plugins.toolkit import config
     expression = config.get('ckanext-report.notes.dataset')
     if not expression:
         return ''
@@ -70,12 +75,8 @@ def percent(numerator, denominator):
 
 def make_csv_from_dicts(rows):
     import csv
-    if six.PY2:
-        import cStringIO as StringIO
-    else:
-        import io as StringIO
 
-    csvout = StringIO.StringIO()
+    csvout = StringIO()
     csvwriter = csv.writer(
         csvout,
         dialect='excel',
@@ -99,7 +100,7 @@ def make_csv_from_dicts(rows):
             if isinstance(item, datetime):
                 item = item.strftime('%Y-%m-%d %H:%M')
             elif isinstance(item, (int, float, list, tuple)):
-                item = str(item)
+                item = six.text_type(item)
             elif item is None:
                 item = ''
             else:
