@@ -1,4 +1,6 @@
+[![Tests](https://github.com/ckan/ckanext-report/actions/workflows/test.yml/badge.svg)](https://github.com/ckan/ckanext-report/actions/workflows/test.yml)
 # ckanext-report
+====================
 
 ckanext-report is a CKAN extension that provides a reporting infrastructure. Here are the features offered:
 
@@ -32,7 +34,7 @@ TODO:
 
 Status: was in production at data.gov.uk around 2014-2016, but since that uses its own CSS rather than core CKAN's, for others to use it CSS needs adding. For an example, see this branch: see https://github.com/GSA/ckanext-report/tree/geoversion
 
-Author(s): David Read and contibutors
+Author(s): David Read and contributors
 
 
 ## Install & setup
@@ -72,6 +74,7 @@ Generate all reports:
 
     (pyenv) $ paster --plugin=ckanext-report report generate --config=mysite.ini
     (pyenv) $ ckan --config=mysite.ini report generate
+
 Generate a single report:
 
     (pyenv) $ paster --plugin=ckanext-report report generate <report name> --config=mysite.ini
@@ -230,7 +233,7 @@ class TaglessReportPlugin(p.SingletonPlugin):
 The last line refers to `tag_report_info` which is a dictionary with properties of the report. This is stored in `reports.py` together with the report code (see above). The info dict looks like this:
 
 ```python
-from ckan.common import OrderedDict
+from collections import OrderedDict
 tagless_report_info = {
     'name': 'tagless-datasets',
     'description': 'Datasets which have no tags.',
