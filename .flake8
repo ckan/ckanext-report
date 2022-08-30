@@ -3,7 +3,6 @@
 
 exclude =
     ckan
-    scripts
 
 # Extended output format.
 format = pylint
