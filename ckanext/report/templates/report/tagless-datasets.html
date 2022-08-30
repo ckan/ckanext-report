@@ -5,8 +5,7 @@ table - main data, as a list of rows, each row is a dict
 data - other data values, as a dict
 #}
 
-{% set ckan_29_or_higher = h.ckan_version().split('.')[1] | int >= 9 %}
-{% set dataset_read_route = 'dataset.read' if ckan_29_or_higher else 'dataset_read' %}
+{% set dataset_read_route = 'dataset.read' if h.is_ckan_29() else 'dataset_read' %}
 <ul>
     <li>{% trans %}Datasets without tags{% endtrans %}: {{ table|length }} / {{ data['num_packages'] }} ({{ data['packages_without_tags_percent'] }})</li>
     <li>{% trans %}Average tags per package{% endtrans %}: {{ data['average_tags_per_package'] }} tags</li>
