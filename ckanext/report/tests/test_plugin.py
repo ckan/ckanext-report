@@ -45,12 +45,10 @@ class TestReportPlugin(object):
 
     def test_tagless_report(self, app):
         u"""Test tagless report generation"""
-        dataset = factories.Dataset()
-
         res = app.get(u'/report/tagless-datasets')
 
         _assert_in_body(u"Datasets which have no tags.", res)
-        _assert_in_body('href="/dataset/' + dataset['name'] + '"', res)
+        _assert_in_body('<h3>Results</h3>', res)
 
     def test_tagless_report_csv(self, app):
         u"""Test tagless report generation"""

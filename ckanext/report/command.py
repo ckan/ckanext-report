@@ -78,7 +78,7 @@ class ReportCommand(p.toolkit.CkanCommand):
         self.log.info('Report table is setup')
 
     def _list(self):
-        utils.list()
+        utils.list_reports()
 
     def _generate(self, report_list=None):
 

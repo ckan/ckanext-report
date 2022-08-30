@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 
 import ckan.plugins as p
-import ckanext.report.blueprint as views
-import ckanext.report.cli as cli
+from ckanext.report import blueprint, cli
 
 
 class MixinPlugin(p.SingletonPlugin):
@@ -12,7 +11,7 @@ class MixinPlugin(p.SingletonPlugin):
     # IBlueprint
 
     def get_blueprint(self):
-        return views.get_blueprints()
+        return blueprint.get_blueprints()
 
     # IClick
 
