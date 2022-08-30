@@ -1,5 +1,8 @@
+# encoding: utf-8
+
 import ckan.plugins as p
-import ckanext.report.utils as utils
+
+from . import utils
 
 
 class ReportCommand(p.toolkit.CkanCommand):

@@ -1,7 +1,8 @@
-# -*- coding: utf-8 -*-
+# encoding: utf-8
 
 import click
-import ckanext.report.utils as utils
+
+from . import utils
 
 
 def get_commands():

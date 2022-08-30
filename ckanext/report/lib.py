@@ -3,8 +3,7 @@ These functions are for use by other extensions for their reports.
 '''
 from datetime import datetime
 import six
-from six.moves import zip
-from six.moves.cStringIO import StringIO
+from six.moves import cStringIO as StringIO, zip
 try:
     from collections import OrderedDict  # from python 2.7
 except ImportError:
