@@ -26,7 +26,7 @@ data_cache_table = Table(
     Column('object_id', types.UnicodeText, index=True),
     Column('key', types.UnicodeText, nullable=False),
     Column('value', types.UnicodeText),
-    Column('created', types.DateTime, default=datetime.datetime.now),
+    Column('created', types.DateTime, default=datetime.datetime.utcnow),
 )
 Index('idx_data_cache_object_id_key', data_cache_table.c.object_id,
       data_cache_table.c.key)
@@ -82,7 +82,7 @@ class DataCache(object):
             return (None, None)
 
         if max_age:
-            age = datetime.datetime.now() - item.created
+            age = datetime.datetime.utcnow() - item.created
             if age > max_age:
                 log.debug('Cache not returned - it is older than requested %s/%s %r > %r',
                           object_id, key, age, max_age)
@@ -126,7 +126,7 @@ class DataCache(object):
             model.Session.add(item)
         else:
             item.value = value
-        item.created = datetime.datetime.now()
+        item.created = datetime.datetime.utcnow()
 
         log.debug('Cache save: %s/%s', object_id, key)
         model.Session.flush()
