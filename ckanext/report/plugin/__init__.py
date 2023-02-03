@@ -24,6 +24,7 @@ class ReportPlugin(MixinPlugin, p.SingletonPlugin):
 
     def update_config(self, config):
         p.toolkit.add_template_directory(config, '../templates')
+        p.toolkit.add_resource('../assets', 'report')
 
     # ITemplateHelpers
 
