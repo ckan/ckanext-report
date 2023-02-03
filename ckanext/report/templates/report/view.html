@@ -8,6 +8,8 @@
 {% endblock%}
 
 {% block primary_content_inner %}
+  {% set type = 'asset' if h.check_ckan_version(min_version="2.9.0", max_version="3.0.0") else 'resource' %}
+  {% include 'report/report_js_' ~ type ~ '.html' %}
       <h1>{{ report.title }}</h1>
       <p>{{ report.description }}</p>
       <p>

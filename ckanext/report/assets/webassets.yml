@@ -1,0 +1,8 @@
+report_js:
+  filter: rjsmin
+  output: ckanext-report/%(version)s_-main.js
+  extra:
+    preload:
+      - base/main
+  contents:
+    - report.js
