@@ -1,4 +1,5 @@
-from builtins import str
+# encoding: utf-8
+import six
 import json
 from flask import Blueprint, request, make_response
 
@@ -7,7 +8,6 @@ from jinja2.exceptions import TemplateNotFound
 
 from ckanext.report.report_registry import Report
 from ckanext.report.lib import make_csv_from_dicts, ensure_data_is_dicts, anonymise_user_names
-from ckanext.report.helpers import relative_url_for
 
 
 import logging
@@ -35,21 +35,29 @@ def view(report_name, organization=None, refresh=False):
     except t.ObjectNotFound:
         t.abort(404)
 
-    rule = request.url_rule
+    args = t.request.args
+    rule = request.url_rule.rule
     # ensure correct url is being used
-    if 'organization' in rule.rule and 'organization' not in report['option_defaults']:
-        t.redirect_to(relative_url_for(organization=None))
-    elif 'organization' not in rule.rule and 'organization' in report['option_defaults'] and \
-            report['option_defaults']['organization']:
-        org = report['option_defaults']['organization']
-        t.redirect_to(relative_url_for(organization=org))
-    if 'organization' in t.request.params:
+    if organization or 'organization' in rule:
+        if 'organization' not in report['option_defaults']:
+            # org is supplied but is not a valid input for this report
+            return t.redirect_to(t.url_for('report.view', report_name=report_name, **args))
+    else:
+        org = report['option_defaults'].get('organization')
+        if org:
+            # org is not supplied, but this report has a default value
+            return t.redirect_to(t.url_for('report.view', report_name=report_name, organization=org, **args))
+
+    org_in_params = t.request.args.get('organization')
+    if org_in_params:
         # organization should only be in the url - let the param overwrite
         # the url.
-        t.redirect_to(relative_url_for())
+        # remove organization form arguments
+        args = {k: v for k, v in args.items(multi=True) if k != 'organization'}
+        return t.redirect_to(t.url_for('report.view', report_name=report_name, organization=org_in_params, **args))
 
     # options
-    options = Report.add_defaults_to_options(t.request.params, report['option_defaults'])
+    options = Report.add_defaults_to_options(t.request.args, report['option_defaults'])
     option_display_params = {}
     if 'format' in options:
         format = options.pop('format')
@@ -65,7 +73,8 @@ def view(report_name, organization=None, refresh=False):
             log.warn('Not displaying report option HTML for param %s as option not recognized')
             continue
         option_display_params = {'value': options[option],
-                                 'default': report['option_defaults'][option]}
+                                 'default': report['option_defaults'][option],
+                                 'report_name': report_name}
         try:
             options_html[option] = \
                 t.render_snippet('report/option_%s.html' % option,
@@ -80,7 +89,7 @@ def view(report_name, organization=None, refresh=False):
         refresh = t.asbool(t.request.params.get('refresh'))
         if 'refresh' in options:
             options.pop('refresh')
-    except ValueError:
+    except t.ValueError:
         refresh = False
 
     # Refresh the cache if requested
@@ -93,7 +102,10 @@ def view(report_name, organization=None, refresh=False):
         except t.NotAuthorized:
             t.abort(401)
         # Don't want the refresh=1 in the url once it is done
-        t.redirect_to(relative_url_for(refresh=None))
+        if organization:
+            t.redirect_to(t.url_for('report.org', report_name=report_name, organization=organization))
+        else:
+            t.redirect_to(t.url_for('report.view', report_name=report_name))
 
     # Check for any options not allowed by the report
     for key in options:
@@ -118,7 +130,7 @@ def view(report_name, organization=None, refresh=False):
             filename = 'report_%s.csv' % key
             response = make_response(make_csv_from_dicts(data['table']))
             response.headers['Content-Type'] = 'application/csv'
-            response.headers['Content-Disposition'] = str('attachment; filename=%s' % (filename))
+            response.headers['Content-Disposition'] = six.text_type('attachment; filename=%s' % (filename))
             return response
         elif format == 'json':
             data['generated_at'] = report_date

@@ -9,7 +9,7 @@ default - Default value for this option
     <label for="option-organization"> {{ _('Organization') }}: </label>
     {% set offer_organization_index = (default == None) %}
     {% if offer_organization_index and value != None %}
-        <a href="{{ h.report__relative_url_for(organization=None) }}">{% trans %}Index of all organizations{% endtrans %}</a>
+        <a href="{{ h.url_for('report.view', report_name=report_name) }}">{% trans %}Index of all organizations{% endtrans %}</a>
     {% endif %}
     <select id="option-organization" name="organization" class="inline js-auto-submit">
         {% if offer_organization_index %}
