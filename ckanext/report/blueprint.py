@@ -17,8 +17,10 @@ c = t.c
 
 report = Blueprint(u'report', __name__)
 
+
 def redirect_to_index():
     return t.redirect_to(t.url_for('report.index'))
+
 
 def index():
     try:
