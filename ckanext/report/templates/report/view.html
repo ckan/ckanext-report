@@ -5,6 +5,9 @@
 {% block breadcrumb_content %}
   <li>{{ h.nav_link(_('Reports'), named_route='report.index') }}</li>
   <li>{{ h.nav_link(report.title, named_route='report.view', report_name=report_name) }}</li>
+  {% if organization %}
+    <li>{{ h.nav_link(organization, named_route='report.org', report_name=report_name, organization=organization) }}</li>
+  {% endif %}
 {% endblock%}
 
 {% block primary_content_inner %}

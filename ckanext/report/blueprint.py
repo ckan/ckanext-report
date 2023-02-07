@@ -159,13 +159,14 @@ def view(report_name, organization=None, refresh=False):
         'report_date': report_date, 'options': options,
         'options_html': options_html,
         'report_template': report['template'],
-        'are_some_results': are_some_results})
+        'are_some_results': are_some_results,
+        'organization': organization })
 
 
 report.add_url_rule(u'/report', view_func=index)
 report.add_url_rule(u'/reports', 'reports', view_func=redirect_to_index)
 report.add_url_rule(u'/report/<report_name>', view_func=view, methods=['GET', 'POST'])
-report.add_url_rule(u'/report/<report_name>/<organization>', 'org',  view_func=view)
+report.add_url_rule(u'/report/<report_name>/<organization>', 'org',  view_func=view, methods=['GET', 'POST'])
 
 
 def get_blueprints():
