@@ -4,7 +4,7 @@
 
 {% block breadcrumb_content %}
   <li>{{ h.nav_link(_('Reports'), named_route='report.index') }}</li>
-  <li>{{ h.nav_link(report.title, named_route='report.view' if '/organization' in request.environ.get('PATH_INFO', '') else 'report.view', report_name=report_name) }}</li>
+  <li>{{ h.nav_link(report.title, named_route='report.view', report_name=report_name) }}</li>
 {% endblock%}
 
 {% block primary_content_inner %}
