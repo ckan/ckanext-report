@@ -17,7 +17,6 @@ c = t.c
 
 report = Blueprint(u'report', __name__)
 
-
 def redirect_to_index():
     return t.redirect_to(t.url_for('report.index'))
 
@@ -59,7 +58,7 @@ def view(report_name, organization=None, refresh=False):
         args = {k: v for k, v in args.items(multi=True) if k != 'organization'}
         return t.redirect_to(t.url_for('report.org', report_name=report_name, organization=org_in_params, **args))
 
-    elif org_in_params is "":
+    elif org_in_params == "":
         # remove empty organization from form arguments
         args = {k: v for k, v in args.items(multi=True) if k != 'organization'}
         return t.redirect_to(t.url_for('report.view', report_name=report_name, **args))
