@@ -160,7 +160,7 @@ def view(report_name, organization=None, refresh=False):
         'options_html': options_html,
         'report_template': report['template'],
         'are_some_results': are_some_results,
-        'organization': organization })
+        'organization': organization})
 
 
 report.add_url_rule(u'/report', view_func=index)
