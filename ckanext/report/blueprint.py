@@ -18,6 +18,9 @@ c = t.c
 report = Blueprint(u'report', __name__)
 
 
+def redirect_to_index():
+    return t.redirect_to(t.url_for('report.index'))
+
 def index():
     try:
         reports = t.get_action('report_list')({}, {})
@@ -46,15 +49,20 @@ def view(report_name, organization=None, refresh=False):
         org = report['option_defaults'].get('organization')
         if org:
             # org is not supplied, but this report has a default value
-            return t.redirect_to(t.url_for('report.view', report_name=report_name, organization=org, **args))
+            return t.redirect_to(t.url_for('report.org', report_name=report_name, organization=org, **args))
 
     org_in_params = t.request.args.get('organization')
     if org_in_params:
         # organization should only be in the url - let the param overwrite
         # the url.
-        # remove organization form arguments
+        # remove organization from form arguments
         args = {k: v for k, v in args.items(multi=True) if k != 'organization'}
-        return t.redirect_to(t.url_for('report.view', report_name=report_name, organization=org_in_params, **args))
+        return t.redirect_to(t.url_for('report.org', report_name=report_name, organization=org_in_params, **args))
+
+    elif org_in_params is "":
+        # remove empty organization from form arguments
+        args = {k: v for k, v in args.items(multi=True) if k != 'organization'}
+        return t.redirect_to(t.url_for('report.view', report_name=report_name, **args))
 
     # options
     options = Report.add_defaults_to_options(t.request.args, report['option_defaults'])
@@ -154,8 +162,9 @@ def view(report_name, organization=None, refresh=False):
 
 
 report.add_url_rule(u'/report', view_func=index)
+report.add_url_rule(u'/reports', 'reports', view_func=redirect_to_index)
 report.add_url_rule(u'/report/<report_name>', view_func=view, methods=['GET', 'POST'])
-report.add_url_rule(u'/report/<report_name>/<organization>', view_func=view)
+report.add_url_rule(u'/report/<report_name>/<organization>', 'org',  view_func=view)
 
 
 def get_blueprints():
