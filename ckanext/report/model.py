@@ -8,6 +8,8 @@ from sqlalchemy import types, Table, Column, Index, MetaData
 from sqlalchemy.orm import mapper
 
 from ckan import model
+import ckan.plugins as p
+from ckan.plugins.toolkit import config
 try:
     from collections import OrderedDict  # from python 2.7
 except ImportError:
@@ -81,7 +83,7 @@ class DataCache(object):
         if not item:
             return (None, None)
 
-        if max_age:
+        if max_age is not None:
             age = datetime.datetime.utcnow() - item.created
             if age > max_age:
                 log.debug('Cache not returned - it is older than requested %s/%s %r > %r',
@@ -105,7 +107,12 @@ class DataCache(object):
 
     @classmethod
     def get_if_fresh(cls, *args, **kwargs):
-        return cls.get(*args, max_age=datetime.timedelta(days=2), **kwargs)
+        # Get cache if it is less than 2 (or as configured) days old.
+        max_age_in_days = p.toolkit.asint(config.get(
+            'ckanext-report.max_age_in_days', 2
+        ))
+        max_age = datetime.timedelta(days=max_age_in_days)
+        return cls.get(*args, max_age=max_age, **kwargs)
 
     @classmethod
     def set(cls, object_id, key, value, convert_json=False):

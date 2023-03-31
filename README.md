@@ -52,6 +52,10 @@ Enable the plugin. In your config (e.g. development.ini or production.ini) add `
 
     ckan.plugins = report
 
+(Optional) Set max age to avoid stale cache. In the CKAN config add ``ckanext-report.max_age_in_days`` and assign an integer value. Default is 2 days. e.g.:
+
+    ckanext-report.max_age_in_days = 2
+
 
 ## Command-line interface
 
